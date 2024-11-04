@@ -9,7 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MVVM\Resources\Images\spotify_logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="MVVM\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="MVVM\Resources\Images\spotify_logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="MVVM\Resources\Themes\DarkTheme.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
   </ItemGroup>
 
 </Project>
