@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="SpotifyCheaper.Views.PlayerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpotifyCheaper.Views">
+    <StackPanel>
+    <TextBlock Text="{Binding CurrentTrack.Title}" FontSize="18" />
+    <Button Content="Play" Command="{Binding PlayCommand}" />
+    <Button Content="Pause" Command="{Binding PauseCommand}" />
+    <Button Content="Shuffle" Command="{Binding ToggleShuffleCommand}" />
+    </StackPanel>
+</UserControl>
