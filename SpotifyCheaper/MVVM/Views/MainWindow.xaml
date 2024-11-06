@@ -49,7 +49,7 @@
                 <Image Source="https://images.hdqwalls.com/wallpapers/spotify-logo-1y.jpg" Opacity="0.3" Stretch="UniformToFill"/>
                 <StackPanel VerticalAlignment="Bottom" Margin="20">
                     <TextBlock Text="2.5 MONTHLY LISTENERS" Foreground="White" FontSize="14"/>
-                    <TextBlock Text="Bunifu UI" Foreground="White" FontSize="32" FontWeight="Bold"/>
+                    <TextBlock Text="She not mine" Foreground="White" FontSize="32" FontWeight="Bold"/>
                     <StackPanel x:Name="Play_Song" Orientation="Horizontal" Margin="0,5,0,0">
                         <Button x:Name="Play" Content="Play Song" Style="{StaticResource HeaderButtonStyle}" Margin="0,0,10,0" Click="Play_Click"/>
                         <Button Content="Play Album" Style="{StaticResource HeaderButtonStyle}"/>
@@ -71,14 +71,32 @@
 
 
             <DockPanel Grid.Row="2" Background="#2d2d2d" Height="100">
-                <!-- Playback Progress Slider above the controls -->
-                <Slider x:Name="DurationSlider" DockPanel.Dock="Top" Minimum="0" Maximum="300" Value="50" Margin="10,10,10,0" Width="492"/>
-                
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock x:Name="CurrentPositionTextBlock" Text="00:00" FontSize="14" Foreground="White" Margin="0,0,10,0" />
-            <TextBlock x:Name="DurationTextBlock" Text="00:00" FontSize="14" Foreground="White" />
-        </StackPanel>
-                
+                <!-- Playback Progress Slider with Duration Indicators -->
+                <Grid DockPanel.Dock="Top" Margin="10,10,10,0">
+                    <!-- Define three columns for current time, slider, and total duration -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Current Time TextBlock -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Slider -->
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Duration TextBlock -->
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Current Position TextBlock -->
+                    <TextBlock x:Name="CurrentPositionTextBlock" Text="00:00" FontSize="14" Foreground="White" 
+               VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0"/>
+
+                    <!-- Duration Slider -->
+                    <Slider x:Name="DurationSlider" Minimum="0" Maximum="300" Value="50" 
+            VerticalAlignment="Center" Grid.Column="1" Margin="10,0"/>
+
+                    <!-- Total Duration TextBlock -->
+                    <TextBlock x:Name="DurationTextBlock" Text="05:00" FontSize="14" Foreground="White" 
+               VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="2"/>
+                </Grid>
+
+
                 <!-- Current Track Info on the Left -->
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
                     <Image Width="50" Height="50" Source="https://i.ytimg.com/vi/3Yq58d2rsRk/maxresdefault.jpg" Margin="5"/>
