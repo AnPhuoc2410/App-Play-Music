@@ -33,7 +33,7 @@ namespace SpotifyCheaper
             LoadSongs();
             SongListView.ItemsSource = _song;
 
-            _mediaPlayer.Open(new Uri(@"E:\FPT\FA24_Term5\PRN212\SpotifyCheaper\SpotifyCheaper\MVVM\Resources\Music\thucgiac.mp3"));
+            _mediaPlayer.Open(new Uri(@"E:\FPT\FA24_Term5\PRN212\SpotifyCheaper\SpotifyCheaper\MVVM\Resources\Music\AnhDaQuenVoiCoDon.mp3"));
 
             // Initialize services and timer
             _musicService = new();
@@ -57,7 +57,7 @@ namespace SpotifyCheaper
         private void Play_Click(object sender, RoutedEventArgs e)
         {
             _mediaPlayer.Play();
-            LoadMp3(@"E:\FPT\FA24_Term5\PRN212\SpotifyCheaper\SpotifyCheaper\MVVM\Resources\Music\thucgiac.mp3");
+            LoadMp3(@"E:\FPT\FA24_Term5\PRN212\SpotifyCheaper\SpotifyCheaper\MVVM\Resources\Music\AnhDaQuenVoiCoDon.mp3");
             _isPlaying = true;
         }
 
@@ -110,6 +110,7 @@ namespace SpotifyCheaper
             if (metadata != null)
             {
                 TrackTitleTextBlock.Text = metadata.Title;
+                ArtistTitleTextBox.Text = metadata.Artist;
                 DurationSlider.Maximum = metadata.Duration.TotalSeconds;
                 DurationTextBlock.Text = metadata.Duration.ToString(@"mm\:ss");
 

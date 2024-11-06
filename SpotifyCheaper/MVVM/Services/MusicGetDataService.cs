@@ -23,11 +23,13 @@ namespace SpotifyCheaper.MVVM.Services
                 // Get the title and duration from the MP3 file
                 string title = file.Tag.Title ?? "Unknown Title";
                 TimeSpan duration = file.Properties.Duration;
+                string artist = file.Tag.FirstPerformer ?? "Unknown Artist";
 
                 return new Track
                 {
                     Title = title,
-                    Duration = duration
+                    Duration = duration,
+                    Artist = artist
                 };
             }
             catch (Exception ex)

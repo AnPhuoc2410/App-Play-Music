@@ -9,7 +9,7 @@ namespace SpotifyCheaper.Models
     public class Track
     {
         public string Title { get; set; }
-        //public string Artist { get; set; }
+        public string Artist { get; set; }
         //public string Album { get; set; }
         public TimeSpan Duration { get; set; }
         //public string FilePath { get; set; }
