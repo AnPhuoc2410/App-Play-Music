@@ -1,8 +1,38 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Color x:Key="PrimaryBackgroundColor">#FF1E1E1E</Color>
-    <Color x:Key="AccentColor">#FF3BA55D</Color>
-    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource PrimaryBackgroundColor}" />
-    <SolidColorBrush x:Key="TextBrush" Color="White" />
-    <SolidColorBrush x:Key="SecondaryTextBrush" Color="#B3FFFFFF" />
+
+    <!-- Navigation Button Style -->
+    <Style x:Key="NavButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Margin" Value="10,5"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="5"/>
+    </Style>
+
+    <!-- Header Button Style -->
+    <Style x:Key="HeaderButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#1DB954"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="5,2"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <!-- Control Button Style -->
+    <Style x:Key="ControlButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <!-- Background and Text Brushes -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#1e1e1e"/>
+    <SolidColorBrush x:Key="TextBrush" Color="White"/>
 </ResourceDictionary>

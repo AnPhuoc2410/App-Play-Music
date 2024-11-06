@@ -3,31 +3,104 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SpotifyCheaper"
         mc:Ignorable="d"
         Icon="..\Resources\Images\spotify_logo.ico"
         Background="{StaticResource BackgroundBrush}"
-         Title="My Music App" Height="800" Width="450" ResizeMode="NoResize" >
+        WindowStartupLocation="CenterScreen"
+        Title="My Music App" Height="800" Width="1000" ResizeMode="NoResize">
     <DockPanel>
-        <Grid DockPanel.Dock="Top">
-            <Image Height="250"
-                   Source="https://images.hdqwalls.com/wallpapers/spotify-logo-1y.jpg"
-                   Opacity="0.3"
-                   Stretch="UniformToFill"/>
-            <StackPanel VerticalAlignment="Bottom" Margin="8">
-                <TextBlock Text="PLAYLIST"
-                           Foreground="{StaticResource TextBrush}"
-                           FontSize="20"
-                           FontWeight="Medium"/>
-            </StackPanel>
-        </Grid>
 
-        <StackPanel DockPanel.Dock="Bottom" Background="{StaticResource BackgroundBrush}">
-            <TextBlock Text="Your Playlist"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextBrush}"
-                       Margin="0,0,0,10"/>
+        <!-- Sidebar -->
+        <StackPanel DockPanel.Dock="Left" Width="200" Background="#2d2d2d">
+            <!-- Spotify Logo and Search Box -->
+            <StackPanel Margin="10">
+                <TextBlock Text="Spotify Cheaper" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                <TextBox Width="180" Height="30" Margin="0,10,0,20" Background="Gray" Foreground="White" />
+            </StackPanel>
+
+            <!-- Navigation Items -->
+            <StackPanel>
+                <Button Content="Browse" Style="{StaticResource NavButtonStyle}" />
+                <Button Content="Activity" Style="{StaticResource NavButtonStyle}" />
+                <Button Content="Radio" Style="{StaticResource NavButtonStyle}" />
+
+                <TextBlock Text="YOUR MUSIC" FontSize="14" FontWeight="Bold" Foreground="Gray" Margin="10,20,0,5"/>
+                <Button Content="Songs" Style="{StaticResource NavButtonStyle}" />
+                <Button Content="Albums" Style="{StaticResource NavButtonStyle}" />
+                <Button Content="Artists" Style="{StaticResource NavButtonStyle}" />
+                <Button Content="Local Files" Style="{StaticResource NavButtonStyle}" />
+            </StackPanel>
         </StackPanel>
-        </DockPanel>
+
+        <!-- Main Content Area -->
+        <Grid>
+            <!-- Define rows for header, list view, and playback controls -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <!-- Header section -->
+                <RowDefinition Height="*"/>
+                <!-- ListView expands here -->
+                <RowDefinition Height="100"/>
+                <!-- Playback controls at bottom -->
+            </Grid.RowDefinitions>
+
+            <!-- Header Section with Album or Artist Information -->
+            <Grid Grid.Row="0" Background="#282828">
+                <Image Source="https://images.hdqwalls.com/wallpapers/spotify-logo-1y.jpg" Opacity="0.3" Stretch="UniformToFill"/>
+                <StackPanel VerticalAlignment="Bottom" Margin="20">
+                    <TextBlock Text="2.5 MONTHLY LISTENERS" Foreground="White" FontSize="14"/>
+                    <TextBlock Text="Bunifu UI" Foreground="White" FontSize="32" FontWeight="Bold"/>
+                    <StackPanel x:Name="Play_Song" Orientation="Horizontal" Margin="0,5,0,0">
+                        <Button x:Name="Play" Content="Play Song" Style="{StaticResource HeaderButtonStyle}" Margin="0,0,10,0" Click="Play_Click"/>
+                        <Button Content="Play Album" Style="{StaticResource HeaderButtonStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <!-- Song List -->
+            <ListView x:Name="SongListView" Grid.Row="1" Background="#1e1e1e" Foreground="White" SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="{Binding Title}" FontSize="16" Foreground="White" Width="300" />
+                            <TextBlock Text="{Binding Duration}" FontSize="16" Foreground="Gray" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+
+            <DockPanel Grid.Row="2" Background="#2d2d2d" Height="100">
+                <!-- Playback Progress Slider above the controls -->
+                <Slider x:Name="DurationSlider" DockPanel.Dock="Top" Minimum="0" Maximum="300" Value="50" Margin="10,10,10,0" Width="492"/>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock x:Name="CurrentPositionTextBlock" Text="00:00" FontSize="14" Foreground="White" Margin="0,0,10,0" />
+            <TextBlock x:Name="DurationTextBlock" Text="00:00" FontSize="14" Foreground="White" />
+        </StackPanel>
+                
+                <!-- Current Track Info on the Left -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
+                    <Image Width="50" Height="50" Source="https://i.ytimg.com/vi/3Yq58d2rsRk/maxresdefault.jpg" Margin="5"/>
+                    <StackPanel Margin="5">
+                        <TextBlock x:Name="TrackTitleTextBlock" Text="Track Title" FontSize="16" Foreground="White" Margin="0,0,0,5" />
+                        <TextBlock x:Name="Author" Text="Greatest Hits" Foreground="Gray" FontSize="12"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Playback Controls in the Center -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="145,0,0,0">
+                    <Button Content="⏮️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Previous_Click"/>
+                    <Button Content="⏯️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="PlayPause_Click"/>
+                    <Button Content="⏭️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Next_Click"/>
+                </StackPanel>
+
+                <!-- Volume Control on the Right in the same line -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="170,0,0,0" Width="173">
+                    <Button Content="🔊" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Mute_Click"/>
+                    <Slider x:Name="VolumeSlider" Width="100" Minimum="0" Maximum="1" Value="0.5" ValueChanged="VolumeSlider_ValueChanged" Margin="10,30,10,0"/>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
 </Window>
