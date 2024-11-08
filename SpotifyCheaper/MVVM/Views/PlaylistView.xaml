@@ -4,8 +4,50 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SpotifyCheaper.Views">
-    <StackPanel>
-    <TextBlock Text="Playlists" FontSize="16" />
-    <ListBox ItemsSource="{Binding Playlists}" DisplayMemberPath="Name" />
-    </StackPanel>
+    <ListView x:Name="SongListView" Grid.Row="1" Background="#1e1e1e" Foreground="White"
+          SelectionMode="Single" BorderThickness="0" ItemsSource="{Binding}" 
+         >
+
+        <!-- Define headers -->
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Track #" Width="50" DisplayMemberBinding="{Binding TrackNumber}" />
+                <GridViewColumn Header="Title" Width="300">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="#2e2e2e" CornerRadius="5" Padding="10" Margin="5">
+                                <Grid Width="300">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Title with scrolling animation -->
+                                    <TextBlock x:Name="TitleTextBlock" Text="{Binding Title}" FontSize="16" 
+                                           Foreground="White" VerticalAlignment="Top" TextTrimming="CharacterEllipsis">
+                                        <TextBlock.RenderTransform>
+                                            <TranslateTransform x:Name="TitleTranslateTransform" />
+                                        </TextBlock.RenderTransform>
+                                        <TextBlock.Triggers>
+                                            <EventTrigger RoutedEvent="Loaded">
+                                                <BeginStoryboard>
+                                                    <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                                        <DoubleAnimation 
+                                                        Storyboard.TargetProperty="(TextBlock.RenderTransform).(TranslateTransform.X)"
+                                                        From="0" To="-100" Duration="0:0:3" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </TextBlock.Triggers>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Artist" Width="200" DisplayMemberBinding="{Binding Artist}" />
+                <GridViewColumn Header="Duration" Width="75" DisplayMemberBinding="{Binding Duration}" />
+            </GridView>
+        </ListView.View>
+    </ListView>
+
 </UserControl>

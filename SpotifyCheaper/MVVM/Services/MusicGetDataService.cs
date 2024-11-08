@@ -31,7 +31,7 @@ namespace SpotifyCheaper.MVVM.Services
                 {
                     TrackNumber = 1,
                     Title = title,
-                    Duration = duration,
+                    Duration = duration.ToString(@"mm\:ss"),
                     Artist = artist
                 };
             }
