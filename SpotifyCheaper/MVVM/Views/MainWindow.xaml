@@ -7,7 +7,7 @@
         Icon="..\Resources\Images\spotify_logo.ico"
         Background="{StaticResource BackgroundBrush}"
         WindowStartupLocation="CenterScreen"
-        Title="My Music App" Height="800" Width="1000" ResizeMode="NoResize">
+        Title="My Music App" Height="800" Width="1000" ResizeMode="NoResize" Loaded="Window_Loaded">
     <DockPanel>
 
         <!-- Sidebar -->
@@ -58,60 +58,101 @@
             </Grid>
 
             <!-- Song List -->
-            <ListView x:Name="SongListView" Grid.Row="1" Background="#1e1e1e" Foreground="White" SelectionMode="Single">
+            <ListView x:Name="SongListView" Grid.Row="1" Background="#1e1e1e" Foreground="White"
+          SelectionMode="Single" BorderThickness="0" ItemsSource="{Binding}" 
+          SelectionChanged="SongListView_SelectionChanged">
+
+                <!-- Define headers -->
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Track #" Width="50" DisplayMemberBinding="{Binding TrackNumber}" />
+                        <GridViewColumn Header="Title" Width="300" DisplayMemberBinding="{Binding Title}" />
+                        <GridViewColumn Header="Artist" Width="200" DisplayMemberBinding="{Binding Artist}" />
+                        <GridViewColumn Header="Duration" Width="75" DisplayMemberBinding="{Binding Duration}" />
+                    </GridView>
+                </ListView.View>
+
+                <!-- Customize ItemTemplate for song rows -->
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="5">
-                            <TextBlock Text="{Binding Title}" FontSize="16" Foreground="White" Width="300" />
-                            <TextBlock Text="{Binding Duration}" FontSize="16" Foreground="Gray" HorizontalAlignment="Right" />
-                        </StackPanel>
+                        <Border Background="#2e2e2e" CornerRadius="5" Padding="10" Margin="5">
+                            <Grid Width="765">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Track Number -->
+                                <TextBlock Text="{Binding TrackNumber}" FontSize="16" Foreground="White" />
+
+                                <!-- Title spanning columns -->
+                                <TextBlock Text="{Binding Title}" FontSize="16" Foreground="White"
+                               VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="189,-1,48,0" />
+
+                                <!-- Artist -->
+                                <TextBlock Text="{Binding Artist}" FontSize="14" Foreground="LightGray"
+                               Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                               Margin="10,0,0,0" />
+
+                                <!-- Duration aligned to the right -->
+                                <TextBlock Text="{Binding Duration}" FontSize="14" Foreground="Gray"
+                               Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right"
+                               Grid.ColumnSpan="2" Margin="0,-1,33,0" />
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
 
+            <!-- Playback Controls -->
             <DockPanel Grid.Row="2" Background="#2d2d2d" Height="100">
                 <!-- Playback Progress Slider with Duration Indicators -->
                 <Grid DockPanel.Dock="Top" Margin="10,10,10,0">
-                    <!-- Define three columns for current time, slider, and total duration -->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <!-- Current Time TextBlock -->
                         <ColumnDefinition Width="*" />
-                        <!-- Slider -->
                         <ColumnDefinition Width="Auto" />
-                        <!-- Duration TextBlock -->
                     </Grid.ColumnDefinitions>
 
                     <!-- Current Position TextBlock -->
                     <TextBlock x:Name="CurrentPositionTextBlock" Text="00:00" FontSize="14" Foreground="White" 
-               VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0"/>
+                               VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0"/>
 
                     <!-- Duration Slider -->
                     <Slider x:Name="DurationSlider" Minimum="0" Maximum="300" Value="50" 
-            VerticalAlignment="Center" Grid.Column="1" Margin="10,0"/>
+                            VerticalAlignment="Center" Grid.Column="1" Margin="10,0"/>
 
                     <!-- Total Duration TextBlock -->
-                    <TextBlock x:Name="DurationTextBlock" Text="05:00" FontSize="14" Foreground="White" 
-               VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="2"/>
+                    <TextBlock x:Name="DurationTextBlock" Text="00:00" FontSize="14" Foreground="White" 
+                               VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="2"/>
                 </Grid>
-
 
                 <!-- Current Track Info on the Left -->
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
                     <Image Width="50" Height="50" Source="https://i.ytimg.com/vi/3Yq58d2rsRk/maxresdefault.jpg" Margin="5"/>
                     <StackPanel Margin="5">
-                        <TextBlock x:Name="TrackTitleTextBlock" Text="Track Title" FontSize="16" Foreground="White" Margin="0,0,0,5" />
-                        <TextBlock x:Name="ArtistTitleTextBox" Text="Greatest Hits" Foreground="Gray" FontSize="12"/>
+                        <TextBlock x:Name="TrackTitleTextBlock" Text="Track Title" FontSize="16" Foreground="White" 
+                   Margin="0,0,0,5" TextTrimming="CharacterEllipsis" MaxWidth="120" />
+                        <TextBlock x:Name="ArtistTitleTextBox" Text="Greatest Hits" Foreground="Gray" FontSize="12" 
+                   TextTrimming="CharacterEllipsis" MaxWidth="120" />
                     </StackPanel>
                 </StackPanel>
 
                 <!-- Playback Controls in the Center -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="145,0,0,0">
-                    <Button Content="⏮️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Previous_Click"/>
-                    <Button Content="⏯️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="PlayPause_Click"/>
-                    <Button Content="⏭️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Next_Click"/>
+                    <Button x:Name="PreviousButton" Content="⏮️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Previous_Click"/>
+                    <Button x:Name="PlayButton" Content="⏯️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="PlayPause_Click"/>
+                    <Button x:Name="NextButton" Content="⏭️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Next_Click"/>
                 </StackPanel>
+
+                <!-- Add Loop and Shuffle buttons in Playback Controls -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
+                    <Button x:Name="LoopButton" Content="🔁" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Loop_Click"/>
+                    <Button x:Name="ShuffleButton" Content="🔀" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Shuffle_Click"/>
+                </StackPanel>
+
 
                 <!-- Volume Control on the Right in the same line -->
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="170,0,0,0" Width="173">

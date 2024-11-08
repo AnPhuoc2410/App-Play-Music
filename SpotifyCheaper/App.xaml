@@ -4,7 +4,12 @@
              xmlns:local="clr-namespace:SpotifyCheaper"
              StartupUri="MVVM/Views/MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary Source="MVVM/Resources/Themes/DarkTheme.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MVVM/Resources/Themes/DarkTheme.xaml"/>
+                <ResourceDictionary Source="MVVM/Resources/Themes/ListViews.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
 
