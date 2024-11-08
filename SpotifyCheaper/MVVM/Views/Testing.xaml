@@ -5,9 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpotifyCheaper.MVVM.Views"
         mc:Ignorable="d"
-        Title="Testing" Height="450" Width="800" Loaded="Testing_Loaded">
+        Title="Testing" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="TestingTextBox" HorizontalAlignment="Left" Height="78" Margin="134,158,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="205"/>
+        <TextBox x:Name="TestingTextBox" HorizontalAlignment="Center" Height="411" Margin="0,16,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="808" RenderTransformOrigin="0.5,0.5">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1"/>
+                    <SkewTransform AngleX="2.247" AngleY="-0.36"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="-5.308" Y="-2.273"/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
 
     </Grid>
 </Window>

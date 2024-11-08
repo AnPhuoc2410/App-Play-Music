@@ -10,16 +10,16 @@ namespace SpotifyCheaper.MVVM.Services
     public class JSonService
     {
         private JsonRepository jsonRepository;
-        public bool InputJson (string file, string value)
-        {
-            jsonRepository = new JsonRepository ();
-            return jsonRepository.InputJsonFile (file, value);
-        }
-
-        public string OutJson (string file, string value)
+        public bool InputJson(string file, string value)
         {
             jsonRepository = new JsonRepository();
-            return jsonRepository.GetJsonFile (file, value);
+            return jsonRepository.InputJsonFile(file, value);
+        }
+
+        public string OutJson(string file, string value)
+        {
+            jsonRepository = new JsonRepository();
+            return jsonRepository.GetJsonFile(file, value);
         }
     }
 }

@@ -1,11 +1,14 @@
-﻿using SpotifyCheaper.MVVM.Models;
+﻿using Microsoft.Win32;
+using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.Services;
+using SpotifyCheaper.MVVM.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace SpotifyCheaper
@@ -14,13 +17,14 @@ namespace SpotifyCheaper
     {
         private MediaPlayer _mediaPlayer = new();
         private bool _isPlaying = false;
-        private ObservableCollection<Song> _songs;
+        private ObservableCollection<Song> _songs = new();
         private DispatcherTimer _timer;
         private MusicGetDataService _musicService = new();
         private int _currentSongIndex = -1;
         private bool _isShuffling = false;
         private bool _isRepeating = false;
         private Random _random = new();
+        private int _songIndex = 1;
 
         public MainWindow()
         {
@@ -32,7 +36,6 @@ namespace SpotifyCheaper
         {
             LoadSongs();
         }
-
         private void InitializePlayer()
         {
             _timer = new DispatcherTimer
@@ -44,14 +47,7 @@ namespace SpotifyCheaper
 
         private void LoadSongs()
         {
-            _songs = new ObservableCollection<Song>
-            {
-                new Song { TrackNumber = 1, Title = "Apologize", Duration = "3:04", Artist = "Sam Smith" },
-                new Song { TrackNumber = 2, Title = "Bad Liar", Duration = "4:21", Artist = "Timbaland" },
-                new Song { TrackNumber = 3, Title = "Burn", Duration = "3:51", Artist = "Ellie Goulding" },
-                new Song { TrackNumber = 4, Title = "AnhDaQuenVoiCoDon", Duration = "4:59", Artist = "Sam Smith" },
-                new Song { TrackNumber = 5, Title = "La La La - Naughty Boy", Duration = "3:59", Artist = "Sam Smith" }
-            };
+            SongListView.Items.Clear();
             SongListView.ItemsSource = _songs;
         }
 
@@ -60,12 +56,12 @@ namespace SpotifyCheaper
             if (_isPlaying)
             {
                 _mediaPlayer.Pause();
-                ((Button)sender).Content = "⏯️"; // Change button text to Play
+                PlayButton.Content = "⏯️"; 
             }
             else
             {
                 _mediaPlayer.Play();
-                ((Button)sender).Content = "⏸️"; // Change button text to Pause
+                PlayButton.Content = "⏸️"; 
             }
             _isPlaying = !_isPlaying;
         }
@@ -123,7 +119,7 @@ namespace SpotifyCheaper
 
         private void PlaySelectedSong(Song song)
         {
-            string filePath = $@"E:\FPT\FA24_Term5\PRN212\SpotifyCheaper\SpotifyCheaper\MVVM\Resources\Music\{song.Title}.mp3";
+            string filePath = song.FilePath;  // Use the dynamic file path from the Song object
 
             _mediaPlayer.Stop();
             _timer.Stop();
@@ -133,12 +129,15 @@ namespace SpotifyCheaper
             {
                 TrackTitleTextBlock.Text = metadata.Title;
                 ArtistTitleTextBox.Text = metadata.Artist;
-                DurationSlider.Maximum = metadata.Duration.TotalSeconds;
-                DurationTextBlock.Text = metadata.Duration.ToString(@"mm\:ss");
+                string durationString = metadata.Duration;
+                TimeSpan duration = TimeSpan.ParseExact(durationString, @"mm\:ss", null);
+                DurationSlider.Maximum = duration.TotalSeconds;
+                DurationTextBlock.Text = metadata.Duration;
 
                 _mediaPlayer.Open(new Uri(filePath));
                 _mediaPlayer.Play();
                 _isPlaying = true;
+                PlayButton.Content = "⏸️";
 
                 _timer.Start();
             }
@@ -147,6 +146,7 @@ namespace SpotifyCheaper
                 MessageBox.Show("Could not retrieve MP3 metadata.");
             }
         }
+
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -172,6 +172,50 @@ namespace SpotifyCheaper
         {
             _mediaPlayer.Volume = _mediaPlayer.Volume > 0 ? 0 : 0.5;
             VolumeSlider.Value = _mediaPlayer.Volume;
+        }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "MP3 Files | *.mp3";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                foreach (var filePath in openFileDialog.FileNames)
+                {
+                    
+                    var metadata = _musicService.GetMp3Metadata(filePath);
+                    if (metadata != null)
+                    {
+                        _songs.Add(new Song
+                        {
+                            TrackNumber = _songIndex,
+                            Title = metadata.Title,
+                            Artist = metadata.Artist,
+                            Duration = metadata.Duration,
+                            FilePath = filePath  // Store the file path
+                        });
+                        _songIndex++;
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Could not retrieve MP3 metadata for {filePath}.");
+                    }
+                }
+            }
+        }
+
+        private void VideoButton_Click(object sender, RoutedEventArgs e)
+        {
+            VideoPlayerView videoPlayerView = new VideoPlayerView();
+            videoPlayerView.ShowDialog();
+            this.Hide();
+        }
+
+        private void SearchingButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

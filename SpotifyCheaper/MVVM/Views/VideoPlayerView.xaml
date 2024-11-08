@@ -1,0 +1,73 @@
+﻿<Window x:Class="SpotifyCheaper.MVVM.Views.VideoPlayerView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:SpotifyCheaper.MVVM.Views"
+        mc:Ignorable="d" 
+        Title="VideoPlayerView" Height="450" Width="800"
+        Background="Transparent"
+        >
+
+    <!-- Define the resources here -->
+    <Window.Resources>
+        <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="29*"/>
+            <RowDefinition Height="385*"/>
+        </Grid.RowDefinitions>
+        <!-- Header Section -->
+        <Border Background="#1DB954" Height="50" VerticalAlignment="Top" Grid.RowSpan="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button x:Name="GoBackButton" Content="↩" Width="59" Height="51" Click="BtnGoBack_Click" Foreground="White" Background="#1DB954"/>
+                <TextBlock Text="My Video Player" FontSize="20" Foreground="White" />
+            </StackPanel>
+        </Border>
+
+        <!-- Media Player Control Area -->
+        <MediaElement Name="mediaElement" Margin="0,31,0,100" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
+
+        <!-- Playback Controls -->
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,277,0,0" HorizontalAlignment="Center" Grid.Row="1">
+            <!-- Progress Bar Simulation -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
+                <TextBlock Text="00:00" VerticalAlignment="Center" Foreground="White" Margin="10,0"/>
+                <Slider Width="300" Minimum="0" Maximum="100" Value="0" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Text="00:00" VerticalAlignment="Center" Foreground="White" Margin="10,0"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <!-- Add icon buttons -->
+                <Button Name="ImportButton" Content="Import" Width="50" Margin="5" Click="BtnImport_Click"/>
+                <Button x:Name="PreviousButton" Content="⏮️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnPrevious_Click"/>
+                <Button x:Name="PlayButton" Content="⏯️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnPlayPause_Click"/>
+                <Button x:Name="NextButton" Content="⏭️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnNext_Click"/>
+                <Button x:Name="LoopButton" Content="🔁" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnRepeat_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

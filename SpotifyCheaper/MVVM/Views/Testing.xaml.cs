@@ -1,5 +1,4 @@
-﻿using SpotifyCheaper.MVVM.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,16 +19,10 @@ namespace SpotifyCheaper.MVVM.Views
     /// </summary>
     public partial class Testing : Window
     {
-        private SpotifyRepository spotifyRepository;
         public Testing()
         {
             InitializeComponent();
         }
 
-        private void Testing_Loaded(object sender, RoutedEventArgs e)
-        {
-            spotifyRepository = new SpotifyRepository();
-            TestingTextBox.Text = spotifyRepository.StringToken();
-        }
     }
 }
