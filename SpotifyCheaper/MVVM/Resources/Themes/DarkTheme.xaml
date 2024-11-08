@@ -35,4 +35,26 @@
     <!-- Background and Text Brushes -->
     <SolidColorBrush x:Key="BackgroundBrush" Color="#1e1e1e"/>
     <SolidColorBrush x:Key="TextBrush" Color="White"/>
+
+    <Style TargetType="Slider" x:Key="GreenSlider">
+        <Setter Property="Template">
+            <Setter.Value>
+               <ControlTemplate TargetType="Slider">
+                   <Grid>
+                       <Track Name="PART_Track" Focusable="False">
+                           <Track.Thumb>
+                                <Thumb Width="10" Height="20" Background="#8EDCAA"/>
+                           </Track.Thumb>
+                           <Track.DecreaseRepeatButton>
+                                <RepeatButton Background="#8EDCAA" />
+                           </Track.DecreaseRepeatButton>
+                           <Track.IncreaseRepeatButton>
+                               <RepeatButton Background="Gray" />
+                           </Track.IncreaseRepeatButton>
+                       </Track>
+                   </Grid>
+               </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

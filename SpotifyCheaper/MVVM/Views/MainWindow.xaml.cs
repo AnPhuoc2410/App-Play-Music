@@ -25,6 +25,7 @@ namespace SpotifyCheaper
         private bool _isRepeating = false;
         private Random _random = new();
         private int _songIndex = 1;
+        private bool _isDragging = false;
 
         public MainWindow()
         {
@@ -162,6 +163,38 @@ namespace SpotifyCheaper
                 Next_Click(null, null);
             }
         }
+        private void DurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!_isDragging)  // Only seek if not dragging
+            {
+                _mediaPlayer.Position = TimeSpan.FromSeconds(DurationSlider.Value);
+            }
+        }
+
+        private void DurationSlider_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Get the clicked position within the slider
+            var slider = sender as Slider;
+            var mousePosition = e.GetPosition(slider);
+
+            // Calculate the percentage of the slider's width that was clicked
+            double clickedPercentage = mousePosition.X / slider.ActualWidth;
+
+            // Calculate the new position in seconds based on the clicked percentage
+            double newPositionInSeconds = clickedPercentage * slider.Maximum;
+
+            // Set the slider value and update the MediaPlayer position
+            slider.Value = newPositionInSeconds;
+            _mediaPlayer.Position = TimeSpan.FromSeconds(newPositionInSeconds);
+        }
+
+
+        private void DurationSlider_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            _isDragging = false;
+            _mediaPlayer.Position = TimeSpan.FromSeconds(DurationSlider.Value);
+        }
+
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -217,5 +250,7 @@ namespace SpotifyCheaper
         {
 
         }
+
+       
     }
 }
