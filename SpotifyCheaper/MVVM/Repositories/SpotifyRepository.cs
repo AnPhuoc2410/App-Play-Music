@@ -73,7 +73,7 @@ namespace SpotifyCheaper.MVVM.Repositories
             return client;
         }
 
-        public List<string> 
+        //public List<string> 
 
     }
 }

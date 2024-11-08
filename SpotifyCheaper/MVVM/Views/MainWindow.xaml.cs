@@ -202,5 +202,12 @@ namespace SpotifyCheaper
             }
         }
 
+        private void SearchingButton_Click(object sender, RoutedEventArgs e)
+        {
+            string sGetSearchTextBox = SearchingTextBox.Text;
+
+        }
+
+       
     }
 }
