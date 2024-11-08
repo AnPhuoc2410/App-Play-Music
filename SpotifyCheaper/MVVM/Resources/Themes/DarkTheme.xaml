@@ -32,6 +32,21 @@
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
+    <Style x:Key="ControlToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Padding" Value="5"/>
+
+        <!-- Change color when toggled on (IsChecked=True) -->
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Foreground" Value="Green"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- Background and Text Brushes -->
     <SolidColorBrush x:Key="BackgroundBrush" Color="#1e1e1e"/>
     <SolidColorBrush x:Key="TextBrush" Color="White"/>

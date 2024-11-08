@@ -4,6 +4,7 @@ using SpotifyCheaper.MVVM.Services;
 using SpotifyCheaper.MVVM.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -22,9 +23,8 @@ namespace SpotifyCheaper
         private MusicGetDataService _musicService = new();
         private int _currentSongIndex = -1;
         private bool _isShuffling = false;
-        private bool _isRepeating = false;
-        private Random _random = new();
         private int _songIndex = 1;
+        private int _lastSongIndex = -1;
         private bool _isDragging = false;
 
         public MainWindow()
@@ -97,25 +97,44 @@ namespace SpotifyCheaper
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentSongIndex < _songs.Count - 1)
+            if (_isShuffling && _songs.Count > 1)
+            {
+                PlayRandomSong();
+                SongListView.SelectedIndex = _currentSongIndex;
+            }
+           else if (_currentSongIndex < _songs.Count - 1)
             {
                 _currentSongIndex++;
                 SongListView.SelectedIndex = _currentSongIndex;
                 PlaySelectedSong(_songs[_currentSongIndex]);
             }
         }
-        private void Shuffle_Click(object sender, RoutedEventArgs e)
+        private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
-            _isShuffling = !_isShuffling;
+            _isShuffling = ShuffleButton.IsChecked == true;
             ShuffleButton.Opacity = _isShuffling ? 1 : 0.5;
             MessageBox.Show($"Shuffle is now {(_isShuffling ? "enabled" : "disabled")}");
         }
-
-        private void Loop_Click(object sender, RoutedEventArgs e)
+        private void PlayRandomSong()
         {
-            _isRepeating = !_isRepeating;
-            LoopButton.Opacity = _isRepeating ? 1 : 0.5;
-            MessageBox.Show($"Repeat is now {(_isRepeating ? "enabled" : "disabled")}");
+            Random random = new Random();
+            int randomIndex;
+
+            // Ensure the new random song is different from the last one
+            do
+            {
+                randomIndex = random.Next(0, _songs.Count);
+            } while (randomIndex == _lastSongIndex);
+
+            _currentSongIndex = randomIndex;
+            _lastSongIndex = _currentSongIndex; // Update last played index
+            PlaySelectedSong(_songs[_currentSongIndex]); // Play the selected song
+        }
+
+        private void LoopButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool isRepeating = LoopButton.IsChecked == true;
+            MessageBox.Show($"Repeat is now {(isRepeating ? "enabled" : "disabled")}");
         }
 
         private void PlaySelectedSong(Song song)

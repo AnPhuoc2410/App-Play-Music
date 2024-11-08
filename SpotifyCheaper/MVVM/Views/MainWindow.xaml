@@ -166,8 +166,8 @@
 
                 <!-- Add Loop and Shuffle buttons in Playback Controls -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
-                    <Button x:Name="LoopButton" Content="🔁" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Loop_Click"/>
-                    <Button x:Name="ShuffleButton" Content="🔀" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Shuffle_Click"/>
+                    <ToggleButton x:Name="ShuffleButton" Content="🔀" Style="{StaticResource ControlToggleButtonStyle}" Margin="5" Click="ShuffleButton_Click"/>
+                    <ToggleButton x:Name="LoopButton" Content="🔁" Style="{StaticResource ControlToggleButtonStyle}" Margin="5" Click="LoopButton_Click"/>
                 </StackPanel>
 
 
