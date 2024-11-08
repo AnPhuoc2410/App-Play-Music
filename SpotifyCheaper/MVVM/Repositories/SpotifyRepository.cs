@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SpotifyCheaper.MVVM.Repositories
 {
@@ -51,13 +52,11 @@ namespace SpotifyCheaper.MVVM.Repositories
             });
             Console.WriteLine(requestContent);
             HttpResponseMessage response = client.PostAsync("https://accounts.spotify.com/api/token", requestContent).Result;
-            
 
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
-                dynamic jsonResponse = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
-                
+                dynamic jsonResponse = JsonConvert.DeserializeObject(responseContent);                
                 return jsonResponse.access_token;
             }
             else
