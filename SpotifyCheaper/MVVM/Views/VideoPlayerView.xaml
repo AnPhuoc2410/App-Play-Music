@@ -5,14 +5,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:SpotifyCheaper.MVVM.Views"
         mc:Ignorable="d" 
+        WindowStartupLocation="CenterScreen"
         Title="VideoPlayerView" Height="450" Width="800"
-        Background="Transparent"
+        Background="#232b2b"
         >
 
     <!-- Define the resources here -->
     <Window.Resources>
         <Style x:Key="IconButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Cursor" Value="Hand"/>
