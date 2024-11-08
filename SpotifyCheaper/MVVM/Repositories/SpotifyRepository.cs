@@ -1,6 +1,6 @@
-﻿using SpotifyCheaper.MVVM.Services;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -12,6 +12,7 @@ namespace SpotifyCheaper.MVVM.Repositories
 
     public class SpotifyRepository
     {
+
         private JSonService jSonService;
         private readonly HttpClient client;
         //public string StringToken ()
@@ -74,6 +75,5 @@ namespace SpotifyCheaper.MVVM.Repositories
         }
 
         public List<string> 
-
     }
 }
