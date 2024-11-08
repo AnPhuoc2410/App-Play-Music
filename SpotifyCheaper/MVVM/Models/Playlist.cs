@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace SpotifyCheaper.Models
 {
+    using SpotifyCheaper.MVVM.Models;
     using System.Collections.ObjectModel;
 
     public class Playlist
     {
         public string? Name { get; set; }
-        public ObservableCollection<Track> Tracks { get; set; } = new ObservableCollection<Track>();
+        public ObservableCollection<Song> Tracks { get; set; } = new ObservableCollection<Song>();
     }
 
 }

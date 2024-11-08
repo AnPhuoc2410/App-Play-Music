@@ -28,7 +28,7 @@
                 <Button Content="Songs" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="Albums" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="Artists" Style="{StaticResource NavButtonStyle}" />
-                <Button Content="Local Files" Style="{StaticResource NavButtonStyle}" />
+                <Button x:Name="ImportButton" Content="Local Files" Style="{StaticResource NavButtonStyle}" Click="ImportButton_Click" />
             </StackPanel>
         </StackPanel>
 

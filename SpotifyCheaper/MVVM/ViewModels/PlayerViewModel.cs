@@ -1,4 +1,5 @@
 ﻿using SpotifyCheaper.Models;
+using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace SpotifyCheaper.ViewModels
 {
     public class PlayerViewModel : ViewModelBase
     {
-        public Track CurrentTrack { get; set; }
+        public Song CurrentTrack { get; set; }
         public bool IsPlaying { get; set; }
         public bool IsShuffle { get; set; }
 
