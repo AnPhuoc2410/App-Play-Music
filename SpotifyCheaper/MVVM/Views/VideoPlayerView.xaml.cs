@@ -40,7 +40,17 @@ namespace SpotifyCheaper.MVVM.Views
 
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-
+            if (_isPlaying)
+            {
+                mediaElement.Pause();
+                PlayButton.Content = "⏯️";
+            }
+            else
+            {
+                mediaElement.Play();
+                PlayButton.Content = "⏸️";
+            }
+            _isPlaying = !_isPlaying;
         }
 
         private void BtnNext_Click(object sender, RoutedEventArgs e)
@@ -55,7 +65,17 @@ namespace SpotifyCheaper.MVVM.Views
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "Video Files|*.mp4;*.avi;*.mkv;*.wmv|All Files|*.*";
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                mediaElement.Source = new Uri(openFileDialog.FileName);
+                mediaElement.Play();
+                _isPlaying = true;
+                PlayButton.Content = "⏸️";
+            }
         }
     }
 }
