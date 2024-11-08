@@ -31,40 +31,40 @@ namespace SpotifyCheaper.MVVM.Repositories
         public string StringToken()
         {
             jSonService = new JSonService();
-            string keyFile = "appsettings.json";
+            string sKeyFile = "appsettings.json";
             string sGetID = "SpotifySettings:ClientID";
             string sGetSecretKey = "SpotifySettings:SercetKeyID";
 
-            string client_id = jSonService.OutJson(keyFile, sGetID);
-            string secret_key_id = jSonService.OutJson(keyFile, sGetSecretKey);
+            string sClientID = jSonService.OutJson(sKeyFile, sGetID);
+            string sSecretKeyID= jSonService.OutJson(sKeyFile, sGetSecretKey);
 
-            // Convert client_id and secret_key to Base64
-            byte[] utf8Bytes = Encoding.UTF8.GetBytes(client_id + ":" + secret_key_id);
+            // Convert key to Base64
+            byte[] utf8Bytes = Encoding.UTF8.GetBytes(sClientID + ":" + sSecretKeyID); // This is spotify format
             string encodedCredentials = Convert.ToBase64String(utf8Bytes);
 
-            using (var client = new HttpClient())
+            var client = new HttpClient();
+            
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", encodedCredentials);
+            var requestContent = new FormUrlEncodedContent(new[]
             {
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", encodedCredentials);
+                new KeyValuePair<string, string>("grant_type", "client_credentials")
+            });
+            Console.WriteLine(requestContent);
+            HttpResponseMessage response = client.PostAsync("https://accounts.spotify.com/api/token", requestContent).Result;
+            
 
-                var requestContent = new FormUrlEncodedContent(new[]
-                {
-            new KeyValuePair<string, string>("grant_type", "client_credentials")
-        });
-
-                HttpResponseMessage response = client.PostAsync("https://accounts.spotify.com/api/token", requestContent).Result;
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = response.Content.ReadAsStringAsync().Result;
-                    dynamic jsonResponse = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
-                    return jsonResponse.access_token;
-                }
-                else
-                {
-                    throw new Exception("Failed to retrieve Spotify token: " + response.ReasonPhrase);
-                }
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = response.Content.ReadAsStringAsync().Result;
+                dynamic jsonResponse = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
+                
+                return jsonResponse.access_token;
             }
+            else
+            {
+                throw new Exception("Failed to retrieve Spotify token: " + response.ReasonPhrase);
+            }
+            
         }
-
     }
 }
