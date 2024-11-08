@@ -212,5 +212,10 @@ namespace SpotifyCheaper
             videoPlayerView.ShowDialog();
             this.Hide();
         }
+
+        private void SearchingButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
