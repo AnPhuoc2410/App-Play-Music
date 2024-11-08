@@ -18,7 +18,7 @@ namespace SpotifyCheaper.MVVM.Views
     /// <summary>
     /// Interaction logic for VideoPlayerView.xaml
     /// </summary>
-    public partial class VideoPlayerView : Page
+    public partial class VideoPlayerView : Window
     {
         public VideoPlayerView()
         {
