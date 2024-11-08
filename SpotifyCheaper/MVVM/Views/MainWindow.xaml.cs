@@ -1,12 +1,14 @@
 ﻿using Microsoft.Win32;
 using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.Services;
+using SpotifyCheaper.MVVM.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace SpotifyCheaper
@@ -22,6 +24,7 @@ namespace SpotifyCheaper
         private bool _isShuffling = false;
         private bool _isRepeating = false;
         private Random _random = new();
+        private int _songIndex = 1;
 
         public MainWindow()
         {
@@ -33,7 +36,6 @@ namespace SpotifyCheaper
         {
             LoadSongs();
         }
-
         private void InitializePlayer()
         {
             _timer = new DispatcherTimer
@@ -54,12 +56,12 @@ namespace SpotifyCheaper
             if (_isPlaying)
             {
                 _mediaPlayer.Pause();
-                ((Button)sender).Content = "⏯️"; // Change button text to Play
+                PlayButton.Content = "⏯️"; 
             }
             else
             {
                 _mediaPlayer.Play();
-                ((Button)sender).Content = "⏸️"; // Change button text to Pause
+                PlayButton.Content = "⏸️"; 
             }
             _isPlaying = !_isPlaying;
         }
@@ -127,12 +129,15 @@ namespace SpotifyCheaper
             {
                 TrackTitleTextBlock.Text = metadata.Title;
                 ArtistTitleTextBox.Text = metadata.Artist;
-                DurationSlider.Maximum = metadata.Duration.TotalSeconds;
-                DurationTextBlock.Text = metadata.Duration.ToString(@"mm\:ss");
+                string durationString = metadata.Duration;
+                TimeSpan duration = TimeSpan.ParseExact(durationString, @"mm\:ss", null);
+                DurationSlider.Maximum = duration.TotalSeconds;
+                DurationTextBlock.Text = metadata.Duration;
 
                 _mediaPlayer.Open(new Uri(filePath));
                 _mediaPlayer.Play();
                 _isPlaying = true;
+                PlayButton.Content = "⏸️";
 
                 _timer.Start();
             }
@@ -177,7 +182,6 @@ namespace SpotifyCheaper
 
             if (openFileDialog.ShowDialog() == true)
             {
-                int count = 1;
                 foreach (var filePath in openFileDialog.FileNames)
                 {
                     
@@ -186,13 +190,13 @@ namespace SpotifyCheaper
                     {
                         _songs.Add(new Song
                         {
-                            TrackNumber = count,
+                            TrackNumber = _songIndex,
                             Title = metadata.Title,
                             Artist = metadata.Artist,
                             Duration = metadata.Duration,
                             FilePath = filePath  // Store the file path
                         });
-                        count++;
+                        _songIndex++;
                     }
                     else
                     {
@@ -202,12 +206,21 @@ namespace SpotifyCheaper
             }
         }
 
-        private void SearchingButton_Click(object sender, RoutedEventArgs e)
+        private void MarqueeTitle_Loaded(object sender, RoutedEventArgs e)
         {
-            string sGetSearchTextBox = SearchingTextBox.Text;
-
+            TextBlock textBlock = sender as TextBlock;
+            if (textBlock != null)
+            {
+                Storyboard storyBoard = (Storyboard)textBlock.Resources["MarqueeStoryboard"];
+                storyBoard.Begin();
+            }
         }
 
-       
+        private void VideoButton_Click(object sender, RoutedEventArgs e)
+        {
+            VideoPlayerView videoPlayerView = new VideoPlayerView();
+            videoPlayerView.ShowDialog();
+            this.Hide();
+        }
     }
 }

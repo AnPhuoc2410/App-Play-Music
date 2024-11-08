@@ -31,7 +31,7 @@
             <StackPanel>
                 <Button Content="Browse" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="Activity" Style="{StaticResource NavButtonStyle}" />
-                <Button Content="Radio" Style="{StaticResource NavButtonStyle}" />
+                <Button x:Name="VideoButton" Content="Video" Style="{StaticResource NavButtonStyle}" Click="VideoButton_Click"/>
 
                 <TextBlock Text="YOUR MUSIC" FontSize="14" FontWeight="Bold" Foreground="Gray" Margin="10,20,0,5"/>
                 <Button Content="Songs" Style="{StaticResource NavButtonStyle}" />
@@ -67,11 +67,10 @@
             </Grid>
 
             <!-- Song List -->
-            <ListView x:Name="SongListView" Grid.Row="1" Background="#1e1e1e" Foreground="White"
-          SelectionMode="Single" BorderThickness="0" ItemsSource="{Binding}" 
+            <ListView x:Name="SongListView" Grid.Row="1" Background="#1e1e1e" Foreground="White"  
+          SelectionMode="Single" BorderThickness="0" ItemsSource="{Binding}"   
           SelectionChanged="SongListView_SelectionChanged">
 
-                <!-- Define headers -->
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Track #" Width="50" DisplayMemberBinding="{Binding TrackNumber}" />
@@ -81,7 +80,6 @@
                     </GridView>
                 </ListView.View>
 
-                <!-- Customize ItemTemplate for song rows -->
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border Background="#2e2e2e" CornerRadius="5" Padding="10" Margin="5">
@@ -95,18 +93,37 @@
                                 <!-- Track Number -->
                                 <TextBlock Text="{Binding TrackNumber}" FontSize="16" Foreground="White" />
 
-                                <!-- Title spanning columns -->
-                                <TextBlock Text="{Binding Title}" FontSize="16" Foreground="White"
-                               VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="189,-1,48,0" />
+                                <!-- Title with marquee effect -->
+                                <Border Grid.ColumnSpan="2" Width="300" >
+                                    <TextBlock x:Name="MarqueeTitle" Text="{Binding Title}" FontSize="16" Foreground="White"  
+                                   VerticalAlignment="Top"   
+                                   Margin="-10,0,0,0" Loaded="MarqueeTitle_Loaded">
+                                        <TextBlock.RenderTransform>
+                                            <TranslateTransform x:Name="MarqueeTranslateTransform"/>
+                                        </TextBlock.RenderTransform>
+                                    </TextBlock>
+
+                                    <Border.Resources>
+                                        <Storyboard x:Key="MarqueeStoryboard" RepeatBehavior="Forever">
+                                            <DoubleAnimation   
+                                    Storyboard.TargetName="MarqueeTranslateTransform"   
+                                    Storyboard.TargetProperty="X"  
+                                    From="{Binding ActualWidth, ElementName=MarqueeTitle}"   
+                                    To="-300"   
+                                    Duration="0:0:5"  
+                                    FillBehavior="HoldEnd"/>
+                                        </Storyboard>
+                                    </Border.Resources>
+                                </Border>
 
                                 <!-- Artist -->
-                                <TextBlock Text="{Binding Artist}" FontSize="14" Foreground="LightGray"
-                               Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                <TextBlock Text="{Binding Artist}" FontSize="14" Foreground="LightGray"  
+                               Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"  
                                Margin="10,0,0,0" />
 
                                 <!-- Duration aligned to the right -->
-                                <TextBlock Text="{Binding Duration}" FontSize="14" Foreground="Gray"
-                               Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right"
+                                <TextBlock Text="{Binding Duration}" FontSize="14" Foreground="Gray"  
+                               Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right"  
                                Grid.ColumnSpan="2" Margin="0,-1,33,0" />
                             </Grid>
                         </Border>
