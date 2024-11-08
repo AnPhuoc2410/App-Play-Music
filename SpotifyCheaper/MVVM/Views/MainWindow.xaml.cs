@@ -206,16 +206,6 @@ namespace SpotifyCheaper
             }
         }
 
-        private void MarqueeTitle_Loaded(object sender, RoutedEventArgs e)
-        {
-            TextBlock textBlock = sender as TextBlock;
-            if (textBlock != null)
-            {
-                Storyboard storyBoard = (Storyboard)textBlock.Resources["MarqueeStoryboard"];
-                storyBoard.Begin();
-            }
-        }
-
         private void VideoButton_Click(object sender, RoutedEventArgs e)
         {
             VideoPlayerView videoPlayerView = new VideoPlayerView();
