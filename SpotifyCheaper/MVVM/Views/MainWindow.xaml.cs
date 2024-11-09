@@ -1,12 +1,15 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.Repositories;
 using SpotifyCheaper.MVVM.Services;
 using SpotifyCheaper.MVVM.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Security.Cryptography;
+using System.Text.Json.Nodes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -46,16 +49,24 @@ namespace SpotifyCheaper
             //Get Path
             // Sau nay thay songPath = playList.Name;
             string path = "songPath.json";
+            string fullPath = Directory.GetCurrentDirectory() + "\\" + path;
+            // Check File co hay ko neu ko co thi tao.
+            if (File.Exists(fullPath))
+            {
+                // Doc tat ca cac bai hat tren thu muc xong roi ghi ra cac bai bi loi ko import dc
+                string GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
+                if (GetTotalSongInFile != null)
+                {
+                    _songs = _musicService.GetMp3List(path, int.Parse(GetTotalSongInFile), out lErrorList);
+                    //Delete cac file bi loi
+                    if (lErrorList.Count != 0) _musicService.DeleteAndChangeTotalSong(path, lErrorList, "TotalSong", _songs.Count.ToString() + 1);
 
-            // Doc tat ca cac bai hat tren thu muc xong roi ghi ra cac bai bi loi ko import dc
-            string GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
-            _songs = _musicService.GetMp3List(path,int.Parse(GetTotalSongInFile), out lErrorList);            
-            // Delete cac file bi loi
-            _musicService.DeleteAndChangeTotalSong(path, lErrorList , "TotalSong", _songs.Count.ToString());
-
-            // Lay tong cac bai sau khi chinh tong so bai lai
-            GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
-            _songIndex = int.Parse(GetTotalSongInFile) + 1;
+                    // Lay tong cac bai sau khi chinh tong so bai lai
+                    GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
+                    _songIndex = int.Parse(GetTotalSongInFile) + 1;
+                }
+            }
+            
             LoadSongs();
         }
         private void InitializePlayer()
@@ -250,6 +261,7 @@ namespace SpotifyCheaper
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
+          
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.Filter = "MP3 Files | *.mp3";
@@ -262,22 +274,29 @@ namespace SpotifyCheaper
                     var metadata = _musicService.GetMp3Metadata(filePath);
                     if (metadata != null)
                     {
-                        _songs.Add(new Song
+                        var song =new Song
                         {
                             TrackNumber = _songIndex,
                             Title = metadata.Title,
                             Artist = metadata.Artist,
                             Duration = metadata.Duration,
                             FilePath = filePath  // Store the file path
-                        });
+                        };
+                        _songs.Add(song);
                         _songIndex++;
+
                     }
+              
+           
                     else
                     {
                         MessageBox.Show($"Could not retrieve MP3 metadata for {filePath}.");
                     }
                 }
             }
+            string inS = _musicService.RetrieveTotalSongFromSongList(_songs);
+            JObject jsonListSong = JObject.Parse(inS);
+            jsonListSong["TotalSong"] = _songIndex;
         }
 
         private void VideoButton_Click(object sender, RoutedEventArgs e)

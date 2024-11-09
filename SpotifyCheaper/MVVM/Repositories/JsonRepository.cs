@@ -41,41 +41,21 @@ namespace SpotifyCheaper.MVVM.Repositories
             }
         }
 
-        public void AddStringToJson(string file, string value)
-        {
-            try
-            {
-                string currentPath = Directory.GetCurrentDirectory();
-                string fullPath = currentPath + "\\" + file;
+        //public void AddStringToJson(string file, string value)
+        //{
+        //    try
+        //    {
+        //        string currentPath = Directory.GetCurrentDirectory();
+        //        string fullPath = currentPath + "\\" + file;
 
-                string sReadFile = File.ReadAllText(fullPath);
-                JObject jsonObject = JObject.Parse(sReadFile);
-                jsonObject.Add("Path", value);
-                File.WriteAllText(fullPath, jsonObject.ToString());
-            }
-            catch(Exception ex) { Console.WriteLine(ex.Message); }
-        }
+        //        string sReadFile = File.ReadAllText(fullPath);
+        //        JObject jsonObject = JObject.Parse(sReadFile);
+        //        jsonObject.Add("Path", value);
+        //        File.WriteAllText(fullPath, jsonObject.ToString());
+        //    }
+        //    catch(Exception ex) { Console.WriteLine(ex.Message); }
+        //}
 
-        public bool InputSongFile(string file, string value)
-        {
-            try
-            {
-                string currentPath = Directory.GetCurrentDirectory();
-                string fullPath = currentPath + "\\" + file;
-
-                //jsonObject.Add("Path", jsonArray.ToString());
-                File.WriteAllText(fullPath, value);
-
-                return File.Exists(fullPath);
-
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions such as parsing errors or file write issues
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return false;
-            }
-        }
 
         public string GetJsonFile(string file, string value)
         {
@@ -138,6 +118,26 @@ namespace SpotifyCheaper.MVVM.Repositories
                 else return false;
             }
             catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool AddJsonValue (string file, string key, string value)
+        {
+            try
+            {
+                string currentPath = Directory.GetCurrentDirectory();
+                string finalPath = currentPath + "\\" + file;
+
+                string jsonAllFile = File.ReadAllText(finalPath);
+                JObject jsonAllObject = JObject.Parse(jsonAllFile);
+
+                jsonAllObject[key] = value;
+                File.WriteAllText(finalPath, jsonAllObject.ToString());
+                return true;
+            }
+            catch (Exception e)
             {
                 return false;
             }

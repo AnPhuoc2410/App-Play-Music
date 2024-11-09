@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SpotifyCheaper.Models;
 using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.Repositories;
@@ -9,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace SpotifyCheaper.MVVM.Services
@@ -53,13 +55,14 @@ namespace SpotifyCheaper.MVVM.Services
         public ObservableCollection<Song> GetMp3List(string filePath, int number, out List<int> ErrorSongIndex)
         {
             ErrorSongIndex = new();
+            JSonService jSonService = new JSonService();
+
             var listSong = new ObservableCollection<Song>();
             try
             {
                 int iTrackNumber = 1;
                 for (int i = 1; i <= number; i++)
                 {
-                    JSonService jSonService = new JSonService();
                     string path = jSonService.OutJsonValue(filePath,i.ToString());
                     
                     // Check if the song exist
@@ -126,9 +129,38 @@ namespace SpotifyCheaper.MVVM.Services
             jsonRepository = new();
             foreach (var error in errorList)
             {
-                jsonRepository.DeleteJsonValue(file, error.ToString());
+                // Lay file co index lon nhat             
+                string sTotalSong = jsonRepository.GetJsonFile(file, "TotalSong");
+                string endListSong = jsonRepository.GetJsonFile(file, sTotalSong);
+
+                // Toi index bi loi, thay bang gia tri index lon nhat xong delete gia tri lon nhat do
+                jsonRepository.ChangeJsonKeyValue(file, error.ToString(), endListSong);
+                jsonRepository.DeleteJsonValue(file, endListSong);
+                jsonRepository.ChangeJsonKeyValue(file, key, value);
+
             }
-            jsonRepository.ChangeJsonKeyValue(file, key, value);
+          
+        }
+
+        public bool AddSong (string file, string key, string value)
+        {
+            jsonRepository =new();
+            string sTotalSong = jsonRepository.GetJsonFile(file, "TotalSong");
+            jsonRepository.ChangeJsonKeyValue(file, "TotalSong", (int.Parse(sTotalSong)+1).ToString());
+            return jsonRepository.AddJsonValue(file, key, value);
+        }
+
+        public string RetrieveTotalSongFromSongList(ObservableCollection<Song> songList)
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            int count = 1;
+
+            foreach (Song song in songList)
+            {
+                dict.Add(count++.ToString(), song.FilePath);
+            }
+            string sListSong = JsonConvert.SerializeObject(dict, Formatting.Indented);
+            return sListSong;
         }
     }
 }

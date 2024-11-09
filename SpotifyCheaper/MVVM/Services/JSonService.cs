@@ -26,7 +26,7 @@ namespace SpotifyCheaper.MVVM.Services
         public bool InputListSong (string file, string listSong)
         {
             jsonRepository = new();
-            return jsonRepository.InputSongFile(file, listSong);
+            return jsonRepository.InputJsonFile(file, listSong);
         }
 
         public bool ChangeValue (string file,string key, string value)
@@ -34,5 +34,10 @@ namespace SpotifyCheaper.MVVM.Services
             jsonRepository = new JsonRepository();
             return jsonRepository.ChangeJsonKeyValue(file, key, value);
         }
+        
+        //public bool AddValue (string file,string key,string value)
+        //{
+
+        //}
     }
 }
