@@ -22,7 +22,7 @@ namespace SpotifyCheaper.MVVM.Views
     /// </summary>
     public partial class VideoPlayerView : Window
     {
-        private MusicGetDataService _musicService;
+        private MusicService _musicService;
         private MediaPlayer _mediaPlayer;
         private bool _isPlaying = false;
         public VideoPlayerView()

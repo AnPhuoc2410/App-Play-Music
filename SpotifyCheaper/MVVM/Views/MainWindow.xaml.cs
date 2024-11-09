@@ -41,9 +41,10 @@ namespace SpotifyCheaper
         {
             // Sau nay thay songPath = playList.Name;
             jsonService = new();
+          
             string path = "songPath.json";
             string GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
-            _songs =_musicService.GetMp3List(path,int.Parse(GetTotalSongInFile));
+            _songs = _musicService.GetMp3List(path,int.Parse(GetTotalSongInFile));
             _songIndex = int.Parse(GetTotalSongInFile) + 1;
             LoadSongs();
         }
@@ -150,10 +151,6 @@ namespace SpotifyCheaper
 
         private void PlaySelectedSong(Song song)
         {
-            // Test
-            string testSong = song.FilePath.ToString();
-            TestKhoi.Text = testSong;
-            //
             string filePath = song.FilePath;  // Use the dynamic file path from the Song object
 
             _mediaPlayer.Stop();
@@ -282,7 +279,8 @@ namespace SpotifyCheaper
 
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            string sSearchName = SearchingTextBox.Text;
+
         }
 
        

@@ -52,39 +52,43 @@ namespace SpotifyCheaper.MVVM.Services
 
         public ObservableCollection<Song> GetMp3List(string filePath, int number)
         {
+            var listSong = new ObservableCollection<Song>();
             try
             {
-                ObservableCollection<Song> listSong = new ObservableCollection<Song>();            
+                int iTrackNumber = 1;
                 for (int i = 1; i <= number; i++)
                 {
                     JSonService jSonService = new JSonService();
                     string path = jSonService.OutJsonValue(filePath,i.ToString());
-
-
-                    var file = TagLib.File.Create(path);
-
-                    // Get the title and duration from the MP3 file
-                    string title = Path.GetFileName(path);
-                    TimeSpan duration = file.Properties.Duration;
-                    string artist = file.Tag.FirstPerformer ?? "Unknown Artist";
-                    Song sSong = new Song
+                    
+                    // Check if the song exist
+                    if (File.Exists(path))
                     {
-                        TrackNumber = i,
-                        Title = title,
-                        Duration = duration.ToString(@"mm\:ss"),
-                        Artist = artist,
-                        FilePath = path
-                    };
-                    listSong.Add(sSong);
+                        
+                        var file = TagLib.File.Create(path);
+                        // Get the title and duration from the MP3 file
+                        string title = Path.GetFileName(path);
+                        TimeSpan duration = file.Properties.Duration;
+                        string artist = file.Tag.FirstPerformer ?? "Unknown Artist";
+                        Song sSong = new Song
+                        {
+                            TrackNumber = iTrackNumber++,
+                            Title = title,
+                            Duration = duration.ToString(@"mm\:ss"),
+                            Artist = artist,
+                            FilePath = path
+                        };
+                        listSong.Add(sSong);                        
+                    }
+                    
                 }
-                Console.WriteLine(listSong);
                 return listSong;
             }
             catch (Exception ex)
             {
                 // Handle or log the error as needed
                 Console.WriteLine("Error retrieving MP3 metadata: " + ex.Message);
-                return null;
+                return listSong;
             }
         }
 
