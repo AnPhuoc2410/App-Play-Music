@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using SpotifyCheaper.MVVM.Services;
 
 namespace SpotifyCheaper.MVVM.Views
 {
@@ -20,6 +22,9 @@ namespace SpotifyCheaper.MVVM.Views
     /// </summary>
     public partial class VideoPlayerView : Window
     {
+        private MusicGetDataService _musicService;
+        private MediaPlayer _mediaPlayer;
+        private bool _isPlaying = false;
         public VideoPlayerView()
         {
             InitializeComponent();
@@ -40,7 +45,17 @@ namespace SpotifyCheaper.MVVM.Views
 
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-
+            if (_isPlaying)
+            {
+                mediaElement.Pause();
+                PlayButton.Content = "⏯️";
+            }
+            else
+            {
+                mediaElement.Play();
+                PlayButton.Content = "⏸️";
+            }
+            _isPlaying = !_isPlaying;
         }
 
         private void BtnNext_Click(object sender, RoutedEventArgs e)
@@ -55,7 +70,17 @@ namespace SpotifyCheaper.MVVM.Views
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "Video Files|*.mp4;*.avi;*.mkv;*.wmv|All Files|*.*";
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                mediaElement.Source = new Uri(openFileDialog.FileName);
+                mediaElement.Play();
+                _isPlaying = true;
+                PlayButton.Content = "⏸️";
+            }
         }
     }
 }
