@@ -39,12 +39,22 @@ namespace SpotifyCheaper
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Sau nay thay songPath = playList.Name;
+
             jsonService = new();
-          
+            List<int> lErrorList;
+
+            //Get Path
+            // Sau nay thay songPath = playList.Name;
             string path = "songPath.json";
+
+            // Doc tat ca cac bai hat tren thu muc xong roi ghi ra cac bai bi loi ko import dc
             string GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
-            _songs = _musicService.GetMp3List(path,int.Parse(GetTotalSongInFile));
+            _songs = _musicService.GetMp3List(path,int.Parse(GetTotalSongInFile), out lErrorList);            
+            // Delete cac file bi loi
+            _musicService.DeleteAndChangeTotalSong(path, lErrorList , "TotalSong", _songs.Count.ToString());
+
+            // Lay tong cac bai sau khi chinh tong so bai lai
+            GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
             _songIndex = int.Parse(GetTotalSongInFile) + 1;
             LoadSongs();
         }

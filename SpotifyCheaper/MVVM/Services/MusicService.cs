@@ -50,8 +50,9 @@ namespace SpotifyCheaper.MVVM.Services
             }
         }
 
-        public ObservableCollection<Song> GetMp3List(string filePath, int number)
+        public ObservableCollection<Song> GetMp3List(string filePath, int number, out List<int> ErrorSongIndex)
         {
+            ErrorSongIndex = new();
             var listSong = new ObservableCollection<Song>();
             try
             {
@@ -80,7 +81,10 @@ namespace SpotifyCheaper.MVVM.Services
                         };
                         listSong.Add(sSong);                        
                     }
-                    
+                    else
+                    {
+                        ErrorSongIndex.Add(i);
+                    }
                 }
                 return listSong;
             }
@@ -104,11 +108,27 @@ namespace SpotifyCheaper.MVVM.Services
             }
             // Add total song number
             songPathDictionary["TotalSong"] = _songs.Count.ToString();
-
             string s = JsonConvert.SerializeObject(songPathDictionary, Formatting.Indented);
             return s;
         }
 
+        public void DeleteAllErrorSong (string file, List<int> errorList)
+        {
+            jsonRepository = new();
+            foreach (var error in errorList)
+            {
+                jsonRepository.DeleteJsonValue(file, error.ToString());
+            }
+        }
 
+        public void DeleteAndChangeTotalSong (string file, List<int> errorList, string key, string value)
+        {
+            jsonRepository = new();
+            foreach (var error in errorList)
+            {
+                jsonRepository.DeleteJsonValue(file, error.ToString());
+            }
+            jsonRepository.ChangeJsonKeyValue(file, key, value);
+        }
     }
 }

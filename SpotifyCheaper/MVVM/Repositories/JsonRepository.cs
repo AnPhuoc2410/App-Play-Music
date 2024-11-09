@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace SpotifyCheaper.MVVM.Repositories
@@ -85,6 +86,61 @@ namespace SpotifyCheaper.MVVM.Repositories
             return configuration[value];
         }
 
-        
+        public bool DeleteJsonValue (string file, string value)
+        {
+            try
+            {
+                // Get Path
+                string currentPath = Directory.GetCurrentDirectory();
+                string finalPath = currentPath + "\\" + file;
+
+                //Read file to Json
+                string jsonAllFile = File.ReadAllText(finalPath);
+                JObject jsonAllObject = JObject.Parse(jsonAllFile);
+
+                if (jsonAllObject.ContainsKey(value)) {
+                    jsonAllObject.Remove(value);
+                    File.WriteAllText(finalPath, jsonAllObject.ToString());
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message );
+                return false;
+            }
+        }
+
+        public bool ChangeJsonKeyValue (string file, string key, string value)
+        {
+            try
+            {
+                //Get Path
+                string currentPath = Directory.GetCurrentDirectory();
+                string finalPath = currentPath + "\\" + file;
+
+                //Parse text to json
+                string jsonAllFile = File.ReadAllText(finalPath);
+                JObject jsonAllObject = JObject.Parse(jsonAllFile);
+
+                //Check if the key exist then change the value
+                if (jsonAllObject.ContainsKey(key))
+                {
+                    jsonAllObject[key] = value;
+                    File.WriteAllText (finalPath, jsonAllObject.ToString());
+                    return true;
+                }
+                else return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

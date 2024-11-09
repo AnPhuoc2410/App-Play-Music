@@ -23,11 +23,16 @@ namespace SpotifyCheaper.MVVM.Services
             return jsonRepository.GetJsonFile(file, value);
         }
 
-        public string InputListSong (string file, string listSong)
+        public bool InputListSong (string file, string listSong)
         {
             jsonRepository = new();
-            return (jsonRepository.InputSongFile(file, listSong))? "Success": "Fail";
+            return jsonRepository.InputSongFile(file, listSong);
         }
 
+        public bool ChangeValue (string file,string key, string value)
+        {
+            jsonRepository = new JsonRepository();
+            return jsonRepository.ChangeJsonKeyValue(file, key, value);
+        }
     }
 }
