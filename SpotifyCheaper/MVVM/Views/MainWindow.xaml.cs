@@ -23,6 +23,7 @@ namespace SpotifyCheaper
         private MusicGetDataService _musicService = new();
         private int _currentSongIndex = -1;
         private bool _isShuffling = false;
+        private bool _isRepeating = false;
         private int _songIndex = 1;
         private int _lastSongIndex = -1;
         private bool _isDragging = false;
@@ -57,12 +58,12 @@ namespace SpotifyCheaper
             if (_isPlaying)
             {
                 _mediaPlayer.Pause();
-                PlayButton.Content = "⏯️"; 
+                PlayButton.Content = "⏯️";
             }
             else
             {
                 _mediaPlayer.Play();
-                PlayButton.Content = "⏸️"; 
+                PlayButton.Content = "⏸️";
             }
             _isPlaying = !_isPlaying;
         }
@@ -79,10 +80,8 @@ namespace SpotifyCheaper
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentSongIndex >= 0 && _currentSongIndex < _songs.Count)
-            {
-                PlaySelectedSong(_songs[_currentSongIndex]);
-            }
+            PlayRandomSong();
+            SongListView.SelectedIndex = _currentSongIndex;            
         }
 
         private void Previous_Click(object sender, RoutedEventArgs e)
@@ -102,16 +101,28 @@ namespace SpotifyCheaper
                 PlayRandomSong();
                 SongListView.SelectedIndex = _currentSongIndex;
             }
-           else if (_currentSongIndex < _songs.Count - 1)
+            else if (_isRepeating)
+            {
+                SongListView.SelectedIndex = _currentSongIndex;
+                PlaySelectedSong(_songs[_currentSongIndex]);
+            }
+            else if (_currentSongIndex < _songs.Count - 1)
             {
                 _currentSongIndex++;
                 SongListView.SelectedIndex = _currentSongIndex;
                 PlaySelectedSong(_songs[_currentSongIndex]);
             }
         }
+
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             _isShuffling = ShuffleButton.IsChecked == true;
+            if (_isRepeating)
+            {
+                _isRepeating = false;
+                LoopButton.IsChecked = false;
+                MessageBox.Show($"Loop is now {(_isRepeating ? "enabled" : "disabled")}");
+            }
             ShuffleButton.Opacity = _isShuffling ? 1 : 0.5;
             MessageBox.Show($"Shuffle is now {(_isShuffling ? "enabled" : "disabled")}");
         }
@@ -133,8 +144,15 @@ namespace SpotifyCheaper
 
         private void LoopButton_Click(object sender, RoutedEventArgs e)
         {
-            bool isRepeating = LoopButton.IsChecked == true;
-            MessageBox.Show($"Repeat is now {(isRepeating ? "enabled" : "disabled")}");
+            _isRepeating = LoopButton.IsChecked == true;
+            if (_isShuffling)
+            {
+                _isShuffling = false;
+                ShuffleButton.IsChecked = false;
+                MessageBox.Show($"Shuffle is now {(_isShuffling ? "enabled" : "disabled")}");
+            }
+            LoopButton.Opacity = _isRepeating ? 1 : 0.5;
+            MessageBox.Show($"Loop is now {(_isRepeating ? "enabled" : "disabled")}");
         }
 
         private void PlaySelectedSong(Song song)
@@ -236,7 +254,7 @@ namespace SpotifyCheaper
             {
                 foreach (var filePath in openFileDialog.FileNames)
                 {
-                    
+
                     var metadata = _musicService.GetMp3Metadata(filePath);
                     if (metadata != null)
                     {
@@ -262,7 +280,6 @@ namespace SpotifyCheaper
         {
             VideoPlayerView videoPlayerView = new VideoPlayerView();
             videoPlayerView.ShowDialog();
-            this.Hide();
         }
 
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
@@ -270,6 +287,6 @@ namespace SpotifyCheaper
 
         }
 
-       
+
     }
 }
