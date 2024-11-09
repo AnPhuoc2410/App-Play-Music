@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using SpotifyCheaper.MVVM.Models;
+using SpotifyCheaper.MVVM.Repositories;
 using SpotifyCheaper.MVVM.Services;
 using SpotifyCheaper.MVVM.Views;
 using System;
@@ -15,16 +17,19 @@ namespace SpotifyCheaper
 {
     public partial class MainWindow : Window
     {
+        private JSonService jsonService;
+
         private MediaPlayer _mediaPlayer = new();
         private bool _isPlaying = false;
         private ObservableCollection<Song> _songs = new();
         private DispatcherTimer _timer;
-        private MusicGetDataService _musicService = new();
+        private MusicService _musicService = new();
         private int _currentSongIndex = -1;
         private bool _isShuffling = false;
         private bool _isRepeating = false;
         private Random _random = new();
         private int _songIndex = 1;
+      
 
         public MainWindow()
         {
@@ -34,6 +39,12 @@ namespace SpotifyCheaper
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Sau nay thay songPath = playList.Name;
+            jsonService = new();
+            string path = "songPath.json";
+            string GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
+            _songs =_musicService.GetMp3List(path,int.Parse(GetTotalSongInFile));
+            _songIndex = int.Parse(GetTotalSongInFile) + 1;
             LoadSongs();
         }
         private void InitializePlayer()
@@ -49,6 +60,7 @@ namespace SpotifyCheaper
         {
             SongListView.Items.Clear();
             SongListView.ItemsSource = _songs;
+
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
@@ -119,6 +131,10 @@ namespace SpotifyCheaper
 
         private void PlaySelectedSong(Song song)
         {
+            // Test
+            string testSong = song.FilePath.ToString();
+            TestKhoi.Text = testSong;
+            //
             string filePath = song.FilePath;  // Use the dynamic file path from the Song object
 
             _mediaPlayer.Stop();
@@ -215,7 +231,7 @@ namespace SpotifyCheaper
 
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }
