@@ -21,7 +21,7 @@ namespace SpotifyCheaper
 {
     public partial class MainWindow : Window
     {
-        private JSonService jsonService;
+        private FileService fileService = new();
 
         private MediaPlayer _mediaPlayer = new();
         private bool _isPlaying = false;
@@ -43,7 +43,7 @@ namespace SpotifyCheaper
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
-            jsonService = new();
+           
             List<int> lErrorList;
 
             //Get Path
@@ -54,15 +54,15 @@ namespace SpotifyCheaper
             if (File.Exists(fullPath))
             {
                 // Doc tat ca cac bai hat tren thu muc xong roi ghi ra cac bai bi loi ko import dc
-                string GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
+                string GetTotalSongInFile = fileService.OutJsonValue("songPath.json", "TotalSong");
                 if (GetTotalSongInFile != null)
                 {
                     _songs = _musicService.GetMp3List(path, int.Parse(GetTotalSongInFile), out lErrorList);
                     //Delete cac file bi loi
-                    if (lErrorList.Count != 0) _musicService.DeleteAndChangeTotalSong(path, lErrorList, "TotalSong", _songs.Count.ToString() + 1);
+                    if (lErrorList.Count != 0) _musicService.DeleteAndChangeTotalSong(path, _songs);
 
                     // Lay tong cac bai sau khi chinh tong so bai lai
-                    GetTotalSongInFile = jsonService.OutJsonValue("songPath.json", "TotalSong");
+                    GetTotalSongInFile = fileService.OutJsonValue("songPath.json", "TotalSong");
                     _songIndex = int.Parse(GetTotalSongInFile) + 1;
                 }
             }
@@ -294,9 +294,15 @@ namespace SpotifyCheaper
                     }
                 }
             }
-            string inS = _musicService.RetrieveTotalSongFromSongList(_songs);
+            string inS = _musicService.SongListToString(_songs);
             JObject jsonListSong = JObject.Parse(inS);
-            jsonListSong["TotalSong"] = _songIndex;
+            jsonListSong["TotalSong"] = _songIndex-1;
+            bool success = fileService.InputJson("songPath.json", jsonListSong.ToString());
+            if (success)
+            {
+                MessageBox.Show("Add song success", "Ok", MessageBoxButton.OK, MessageBoxImage.None);
+            }
+            else MessageBox.Show("Add song unsuccess", "Ok", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void VideoButton_Click(object sender, RoutedEventArgs e)

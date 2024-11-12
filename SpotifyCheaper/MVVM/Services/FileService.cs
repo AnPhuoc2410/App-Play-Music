@@ -8,30 +8,26 @@ using System.Xml.Linq;
 
 namespace SpotifyCheaper.MVVM.Services
 {
-    public class JSonService
+    public class FileService
     {
-        private JsonRepository jsonRepository;
+        private FileRepository jsonRepository;
         public bool InputJson(string file, string value)
         {
-            jsonRepository = new JsonRepository();
+            jsonRepository = new FileRepository();
             return jsonRepository.InputJsonFile(file, value);
         }
 
         public string OutJsonValue (string file, string value)
         {
-            jsonRepository = new JsonRepository();
+            jsonRepository = new FileRepository();
             return jsonRepository.GetJsonFile(file, value);
         }
 
-        public bool InputListSong (string file, string listSong)
-        {
-            jsonRepository = new();
-            return jsonRepository.InputJsonFile(file, listSong);
-        }
+        //public string 
 
         public bool ChangeValue (string file,string key, string value)
         {
-            jsonRepository = new JsonRepository();
+            jsonRepository = new FileRepository();
             return jsonRepository.ChangeJsonKeyValue(file, key, value);
         }
         

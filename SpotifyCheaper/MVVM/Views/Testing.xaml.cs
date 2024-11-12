@@ -23,7 +23,7 @@ namespace SpotifyCheaper.MVVM.Views
     /// </summary>
     public partial class Testing : Window
     {
-        private JSonService jsonService;
+        private FileService jsonService;
 
         public ObservableCollection<Song> _songs {  get; set; }
         public string testString {  get; set; }
@@ -34,7 +34,7 @@ namespace SpotifyCheaper.MVVM.Views
 
         private void Testing_Loaded(object sender, RoutedEventArgs e)
         {
-            JsonRepository jsonRepository = new();
+            FileRepository jsonRepository = new();
             //string textBoxOut= testString;
             int i = 1;
             string textBoxOut = jsonRepository.GetJsonFile("songPath.json", i.ToString());

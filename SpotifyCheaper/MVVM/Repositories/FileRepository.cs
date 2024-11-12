@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SpotifyCheaper.MVVM.Repositories
 {
-    public class JsonRepository
+    public class FileRepository
     {
         /// <summary>
         /// Change from object string to json file
@@ -25,7 +25,7 @@ namespace SpotifyCheaper.MVVM.Repositories
                 string currentPath = Directory.GetCurrentDirectory();
                 string fullPath = currentPath +"\\"+ file;
 
-                JArray jsonArray = JArray.Parse(value);
+                JObject jsonArray = JObject.Parse(value);
 
                 // Create the file and write the JSON content
                 File.WriteAllText(fullPath, jsonArray.ToString());

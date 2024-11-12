@@ -9,7 +9,7 @@ namespace SpotifyCheaper.MVVM.Repositories
     public class SpotifyRepository
     {
 
-         private JSonService jSonService;
+         private FileService jSonService;
         private readonly HttpClient client;
         //public string StringToken ()
         //{
@@ -28,7 +28,7 @@ namespace SpotifyCheaper.MVVM.Repositories
         //}
         public string StringToken()
         {
-            jSonService = new JSonService();
+            jSonService = new FileService();
             string sKeyFile = "appsettings.json";
             string sGetID = "SpotifySettings:ClientID";
             string sGetSecretKey = "SpotifySettings:SercetKeyID";
