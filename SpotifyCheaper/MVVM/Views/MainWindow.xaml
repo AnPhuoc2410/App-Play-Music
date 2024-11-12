@@ -58,7 +58,7 @@
                 <Image Source="https://images.hdqwalls.com/wallpapers/spotify-logo-1y.jpg" Opacity="0.3" Stretch="UniformToFill"/>
                 <StackPanel VerticalAlignment="Bottom" Margin="20">
                     <TextBlock Text="2.5 MONTHLY LISTENERS" Foreground="White" FontSize="14"/>
-                    <TextBlock Text="She not mine" Foreground="White" FontSize="32" FontWeight="Bold"/>
+                    <TextBlock x:Name="TestKhoi" Text="She not mine" Foreground="White" FontSize="32" FontWeight="Bold"/>
                     <StackPanel x:Name="Play_Song" Orientation="Horizontal" Margin="0,5,0,0">
                         <Button x:Name="Play" Content="Play Song" Style="{StaticResource HeaderButtonStyle}" Margin="0,0,10,0" Click="Play_Click"/>
                         <Button Content="Play Album" Style="{StaticResource HeaderButtonStyle}"/>
@@ -143,7 +143,7 @@
 
                     <!-- Total Duration TextBlock -->
                     <TextBlock x:Name="DurationTextBlock" Text="00:00" FontSize="14" Foreground="White" 
-                               VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="2" />
+                               VerticalAlignment="Bottom" Margin="10,0,0,1" Grid.Column="2" />
                 </Grid>
 
                 <!-- Current Track Info on the Left -->
