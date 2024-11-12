@@ -22,12 +22,13 @@ namespace SpotifyCheaper
     public partial class MainWindow : Window
     {
         private FileService fileService = new();
-
+        private MusicButtonFunction musicButton = new();
+        private MusicService _musicService = new();
         private MediaPlayer _mediaPlayer = new();
+
         private bool _isPlaying = false;
         private ObservableCollection<Song> _songs = new();
         private DispatcherTimer _timer;
-        private MusicService _musicService = new();
         private int _currentSongIndex = -1;
         private bool _isShuffling = false;
         private int _songIndex = 1;
@@ -316,6 +317,9 @@ namespace SpotifyCheaper
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
         {
             string sSearchName = SearchingTextBox.Text;
+            var displayListSong = musicButton.FindMusic(sSearchName, _songs);
+            //SongListView.Items.Clear();
+            SongListView.ItemsSource = displayListSong;
 
         }
 
