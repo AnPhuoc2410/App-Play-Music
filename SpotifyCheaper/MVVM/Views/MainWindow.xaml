@@ -143,7 +143,7 @@
 
                     <!-- Total Duration TextBlock -->
                     <TextBlock x:Name="DurationTextBlock" Text="00:00" FontSize="14" Foreground="White" 
-                               VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="2" />
+                               VerticalAlignment="Bottom" Margin="10,0,0,1" Grid.Column="2" />
                 </Grid>
 
                 <!-- Current Track Info on the Left -->

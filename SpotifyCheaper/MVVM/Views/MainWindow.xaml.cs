@@ -308,8 +308,9 @@ namespace SpotifyCheaper
         private void VideoButton_Click(object sender, RoutedEventArgs e)
         {
             VideoPlayerView videoPlayerView = new VideoPlayerView();
-            videoPlayerView.ShowDialog();
             this.Hide();
+            videoPlayerView.ShowDialog();
+            
         }
 
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
