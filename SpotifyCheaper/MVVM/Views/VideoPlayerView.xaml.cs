@@ -266,10 +266,10 @@ namespace SpotifyCheaper.MVVM.Views
             if (VideoListView.SelectedItem is Video selectedVideo)
             {
                 _currentVideoIndex = _videoService.Videos.IndexOf(selectedVideo);
-                PlaySelectedSong(selectedVideo);
+                PlaySelectedVideo(selectedVideo);
             }
         }
-        private void PlaySelectedSong(Video video)
+        private void PlaySelectedVideo(Video video)
         {
             string filePath = video.FilePath;  // Use the dynamic file path from the Song object
 
