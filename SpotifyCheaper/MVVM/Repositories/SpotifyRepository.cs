@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
+using SpotifyCheaper.MVVM.Services;
 
 namespace SpotifyCheaper.MVVM.Repositories
 {
@@ -8,7 +9,7 @@ namespace SpotifyCheaper.MVVM.Repositories
     public class SpotifyRepository
     {
 
-        // private JSonService jSonService;
+         private FileService jSonService;
         private readonly HttpClient client;
         //public string StringToken ()
         //{
@@ -27,21 +28,21 @@ namespace SpotifyCheaper.MVVM.Repositories
         //}
         public string StringToken()
         {
-            //jSonService = new JSonService();
+            jSonService = new FileService();
             string sKeyFile = "appsettings.json";
             string sGetID = "SpotifySettings:ClientID";
             string sGetSecretKey = "SpotifySettings:SercetKeyID";
 
-            //string sClientID = jSonService.OutJson(sKeyFile, sGetID);
-            //string sSecretKeyID= jSonService.OutJson(sKeyFile, sGetSecretKey);
+            string sClientID = jSonService.OutJsonValue(sKeyFile, sGetID);
+            string sSecretKeyID = jSonService.OutJsonValue(sKeyFile, sGetSecretKey);
 
-            // Convert key to Base64
-            //byte[] utf8Bytes = Encoding.UTF8.GetBytes(sClientID + ":" + sSecretKeyID); // This is spotify format
-            //string encodedCredentials = Convert.ToBase64String(utf8Bytes);
+            //Convert key to Base64
+            byte[] utf8Bytes = Encoding.UTF8.GetBytes(sClientID + ":" + sSecretKeyID); // This is spotify format
+            string encodedCredentials = Convert.ToBase64String(utf8Bytes);
 
 
 
-           // client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", encodedCredentials);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", encodedCredentials);
             var requestContent = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("grant_type", "client_credentials")

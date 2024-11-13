@@ -22,9 +22,10 @@ namespace SpotifyCheaper.MVVM.Views
     /// </summary>
     public partial class VideoPlayerView : Window
     {
-        private MusicGetDataService _musicService;
+        private MusicService _musicService;
         private MediaPlayer _mediaPlayer;
         private bool _isPlaying = false;
+        private bool _isDragging = false;
         public VideoPlayerView()
         {
             InitializeComponent();
@@ -80,6 +81,15 @@ namespace SpotifyCheaper.MVVM.Views
                 mediaElement.Play();
                 _isPlaying = true;
                 PlayButton.Content = "⏸️";
+            }
+        }
+
+
+        private void DurationBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!_isDragging)  // Only seek if not dragging
+            {
+                _mediaPlayer.Position = TimeSpan.FromSeconds(DurationBar.Value);
             }
         }
     }
