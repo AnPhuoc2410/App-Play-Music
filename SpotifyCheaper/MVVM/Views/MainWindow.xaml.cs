@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.Services;
 using SpotifyCheaper.MVVM.Views;
+using SpotifyCheaper.ViewModels;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
@@ -48,6 +49,18 @@ namespace SpotifyCheaper
             _songSerivce.LoadSongsFromJson();
             LoadSongs();
         }
+
+        private void ArtistsButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayListBox.Visibility = PlayListBox.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+
+            // Optionally, bind data here if not already bound in your ViewModel setup
+            DataContext = new MainViewModel();
+        }
+
+
+
+
         private void InitializePlayer()
         {
             _timer = new DispatcherTimer
@@ -401,6 +414,7 @@ namespace SpotifyCheaper
                     Width = 24,
                     Height = 24
                 };
+                _musicService.DeleteAndChangeTotalSong("songPath.json", _songSerivce.Songs);
                 MessageBox.Show("Song deleted.", "Delete", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -414,9 +428,15 @@ namespace SpotifyCheaper
             SongListView.ItemsSource = displayListSong;
 
         }
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+
+        private void PlayListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized; // Minimize the window
+            if (PlayListBox.SelectedItem != null)
+            {
+              
+                string selectedArtist = PlayListBox.SelectedItem.ToString();
+
+            }
         }
     }
 }
