@@ -4,8 +4,8 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Google.Apis.YouTube.v3;
 using SpotifyCheaper.MVVM.Services;
+using SpotifyCheaper.MVVM.Models;
 
 namespace SpotifyCheaper.MVVM.Views
 {
@@ -265,10 +265,10 @@ namespace SpotifyCheaper.MVVM.Views
             if (VideoListView.SelectedItem is Video selectedVideo)
             {
                 _currentVideoIndex = _videoService.Videos.IndexOf(selectedVideo);
-                PlaySelectedSong(selectedVideo);
+                PlaySelectedVideo(selectedVideo);
             }
         }
-        private void PlaySelectedSong(Video video)
+        private void PlaySelectedVideo(Video video)
         {
             string filePath = video.FilePath;  // Use the dynamic file path from the Song object
 

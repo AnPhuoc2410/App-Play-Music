@@ -5,7 +5,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:SpotifyCheaper.MVVM.Views"        
         mc:Ignorable="d" 
-        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         WindowStartupLocation="CenterScreen"
         Title="VideoPlayerView" Height="800" Width="1200" ResizeMode="NoResize" Background="#232b2b"
         MouseMove="Window_MouseMove"
@@ -76,7 +75,7 @@
         <Button x:Name="GoBackButton" Content="↩" Click="BtnGoBack_Click" Foreground="White" Background="Transparent" 
          Margin="2,-672,1123,616" BorderThickness="0" FontSize="30"/>
         <!-- Media Player Control Area -->
-        <MediaElement Name="mediaElement" Margin="0,-624,0,-1" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
+        
 
         <ListView x:Name="VideoListView"   
             Grid.Row="1"   
@@ -126,7 +125,7 @@
 
         </ListView>
 
-
+        <MediaElement Name="mediaElement" Margin="0,-624,0,-1" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
 
         <!-- Playback Controls -->
         <StackPanel x:Name="ControlsPanel" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Height="88" Width="406">
