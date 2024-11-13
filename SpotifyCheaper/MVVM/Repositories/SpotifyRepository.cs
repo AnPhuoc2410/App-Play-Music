@@ -69,8 +69,5 @@ namespace SpotifyCheaper.MVVM.Repositories
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", token);
             return client;
         }
-
-        //public List<string> 
-
     }
 }
