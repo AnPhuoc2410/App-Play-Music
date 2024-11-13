@@ -1,12 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 
 namespace SpotifyCheaper.MVVM.Repositories
 {
@@ -23,7 +17,7 @@ namespace SpotifyCheaper.MVVM.Repositories
             try
             {
                 string currentPath = Directory.GetCurrentDirectory();
-                string fullPath = currentPath +"\\"+ file;
+                string fullPath = currentPath + "\\" + file;
 
                 JObject jsonArray = JObject.Parse(value);
 
@@ -31,7 +25,7 @@ namespace SpotifyCheaper.MVVM.Repositories
                 File.WriteAllText(fullPath, jsonArray.ToString());
 
                 return File.Exists(fullPath);
-                     
+
             }
             catch (Exception ex)
             {
@@ -66,7 +60,7 @@ namespace SpotifyCheaper.MVVM.Repositories
             return configuration[value];
         }
 
-        public bool DeleteJsonValue (string file, string value)
+        public bool DeleteJsonValue(string file, string value)
         {
             try
             {
@@ -78,7 +72,8 @@ namespace SpotifyCheaper.MVVM.Repositories
                 string jsonAllFile = File.ReadAllText(finalPath);
                 JObject jsonAllObject = JObject.Parse(jsonAllFile);
 
-                if (jsonAllObject.ContainsKey(value)) {
+                if (jsonAllObject.ContainsKey(value))
+                {
                     jsonAllObject.Remove(value);
                     File.WriteAllText(finalPath, jsonAllObject.ToString());
                     return true;
@@ -89,14 +84,14 @@ namespace SpotifyCheaper.MVVM.Repositories
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message );
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
 
-        public bool ChangeJsonKeyValue (string file, string key, string value)
+        public bool ChangeJsonKeyValue(string file, string key, string value)
         {
             try
             {
@@ -112,7 +107,7 @@ namespace SpotifyCheaper.MVVM.Repositories
                 if (jsonAllObject.ContainsKey(key))
                 {
                     jsonAllObject[key] = value;
-                    File.WriteAllText (finalPath, jsonAllObject.ToString());
+                    File.WriteAllText(finalPath, jsonAllObject.ToString());
                     return true;
                 }
                 else return false;
@@ -123,7 +118,7 @@ namespace SpotifyCheaper.MVVM.Repositories
             }
         }
 
-        public bool AddJsonValue (string file, string key, string value)
+        public bool AddJsonValue(string file, string key, string value)
         {
             try
             {

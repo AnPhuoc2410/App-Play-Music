@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpotifyCheaper.Models;
-using System.Collections.ObjectModel;
+﻿using SpotifyCheaper.Models;
 using SpotifyCheaper.MVVM.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace SpotifyCheaper.ViewModels
 {
-    
+
 
     public class PlaylistViewModel : ViewModelBase
     {

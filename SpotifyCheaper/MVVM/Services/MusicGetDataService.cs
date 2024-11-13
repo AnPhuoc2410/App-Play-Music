@@ -1,12 +1,5 @@
-﻿using SpotifyCheaper.Models;
-using SpotifyCheaper.MVVM.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using SpotifyCheaper.MVVM.Models;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace SpotifyCheaper.MVVM.Services
@@ -43,7 +36,6 @@ namespace SpotifyCheaper.MVVM.Services
                     Title = title,
                     Duration = duration.ToString(@"mm\:ss"),
                     Artist = artist,
-                    AlbumCoverImage = imageData
                 };
             }
             catch (Exception ex)

@@ -1,11 +1,5 @@
-﻿using SpotifyCheaper.Models;
-using SpotifyCheaper.MVVM.Models;
+﻿using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpotifyCheaper.ViewModels
 {

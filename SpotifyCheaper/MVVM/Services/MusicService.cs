@@ -3,15 +3,8 @@ using Newtonsoft.Json.Linq;
 using SpotifyCheaper.Models;
 using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.Repositories;
-using SpotifyCheaper.MVVM.Views;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 
 namespace SpotifyCheaper.MVVM.Services
 {
@@ -63,12 +56,12 @@ namespace SpotifyCheaper.MVVM.Services
                 int iTrackNumber = 1;
                 for (int i = 1; i <= number; i++)
                 {
-                    string path = fileService.OutJsonValue(filePath,i.ToString());
-                    
+                    string path = fileService.OutJsonValue(filePath, i.ToString());
+
                     // Check if the song exist
                     if (File.Exists(path))
                     {
-                        
+
                         var file = TagLib.File.Create(path);
                         // Get the title and duration from the MP3 file
                         string title = Path.GetFileName(path);
@@ -82,7 +75,7 @@ namespace SpotifyCheaper.MVVM.Services
                             Artist = artist,
                             FilePath = path
                         };
-                        listSong.Add(sSong);                        
+                        listSong.Add(sSong);
                     }
                     else
                     {
@@ -115,7 +108,7 @@ namespace SpotifyCheaper.MVVM.Services
             return s;
         }
 
-        public void DeleteAllErrorSong (string file, List<int> errorList)
+        public void DeleteAllErrorSong(string file, List<int> errorList)
         {
             fileRepository = new();
             foreach (var error in errorList)
@@ -125,7 +118,7 @@ namespace SpotifyCheaper.MVVM.Services
         }
 
         //Ver 1
-        public void DeleteAndChangeTotalSong (string file, List<int> errorList, string key, string value)
+        public void DeleteAndChangeTotalSong(string file, List<int> errorList, string key, string value)
         {
 
             foreach (var error in errorList)
@@ -143,7 +136,7 @@ namespace SpotifyCheaper.MVVM.Services
             ///////////////////////////////////////
 
 
-          
+
         }
 
         // Ver 2
@@ -160,7 +153,7 @@ namespace SpotifyCheaper.MVVM.Services
         }
 
         // Ver 3
-        public bool DeleteAndChangeTotalSong (string file, ObservableCollection<Song> songList)
+        public bool DeleteAndChangeTotalSong(string file, ObservableCollection<Song> songList)
         {
             string sSongList = SongListToString(songList);
             JObject jObjectList = JObject.Parse(sSongList);
@@ -168,10 +161,10 @@ namespace SpotifyCheaper.MVVM.Services
             return fileRepository.InputJsonFile(file, jObjectList.ToString());
         }
 
-        public bool AddSong (string file, string key, string value)
+        public bool AddSong(string file, string key, string value)
         {
             string sTotalSong = fileRepository.GetJsonFile(file, "TotalSong");
-            fileRepository.ChangeJsonKeyValue(file, "TotalSong", (int.Parse(sTotalSong)+1).ToString());
+            fileRepository.ChangeJsonKeyValue(file, "TotalSong", (int.Parse(sTotalSong) + 1).ToString());
             return fileRepository.AddJsonValue(file, key, value);
         }
 

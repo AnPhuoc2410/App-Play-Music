@@ -1,56 +1,100 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using SpotifyCheaper.MVVM.Models;
-using System;
-using System.Collections.Generic;
+using SpotifyCheaper.MVVM.Repositories;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
+using System.Windows.Media;
 
 namespace SpotifyCheaper.MVVM.Services
 {
     public class MusicButtonService
     {
-        private MusicGetDataService _musicService = new();
-        private ObservableCollection<Song> _songs = new();
-        private int _songIndex = 1;
+        private readonly MediaPlayer _mediaPlayer;
+        private readonly ObservableCollection<Song> _songs;
+        private int _currentSongIndex;
+        private bool _isPlaying;
+        private bool _isShuffling;
+        private bool _isLooping;
 
-
-        public void ImportData()
+        public MusicButtonService(MediaPlayer mediaPlayer, ObservableCollection<Song> songs)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.Filter = "MP3 Files | *.mp3";
+            _mediaPlayer = mediaPlayer;
+            _songs = songs;
+            _currentSongIndex = -1;
+        }
 
-            if (openFileDialog.ShowDialog() == true)
+        public void PlayPause()
+        {
+            if (_isPlaying)
             {
-                foreach (var filePath in openFileDialog.FileNames)
-                {
+                _mediaPlayer.Pause();
+            }
+            else
+            {
+                _mediaPlayer.Play();
+            }
+            _isPlaying = !_isPlaying;
+        }
 
-                    var metadata = _musicService.GetMp3Metadata(filePath);
-                    if (metadata != null)
-                    {
-                        _songs.Add(new Song
-                        {
-                            TrackNumber = _songIndex,
-                            Title = metadata.Title,
-                            Artist = metadata.Artist,
-                            Duration = metadata.Duration,
-                            FilePath = filePath  // Store the file path
-                        });
-                        _songIndex++;
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Could not retrieve MP3 metadata for {filePath}.");
-                    }
-                }
+        public void PlaySelectedSong(Song song)
+        {
+            _currentSongIndex = _songs.IndexOf(song);
+            PlayCurrentSong();
+        }
+
+        private void PlayCurrentSong()
+        {
+            if (_currentSongIndex < 0 || _currentSongIndex >= _songs.Count)
+                return;
+
+            _mediaPlayer.Stop();
+            _mediaPlayer.Open(new Uri(_songs[_currentSongIndex].FilePath));
+            _mediaPlayer.Play();
+            _isPlaying = true;
+        }
+
+        public void Next()
+        {
+            if (_isShuffling)
+            {
+                PlayRandomSong();
+            }
+            else
+            {
+                _currentSongIndex = (_currentSongIndex + 1) % _songs.Count;
+                PlayCurrentSong();
             }
         }
-        public List<Song> GetSongList()
+
+        public void Previous()
         {
-            return _songs.ToList();
+            _currentSongIndex = (_currentSongIndex - 1 + _songs.Count) % _songs.Count;
+            PlayCurrentSong();
+        }
+
+        public void Shuffle(bool isShuffling)
+        {
+            _isShuffling = isShuffling;
+        }
+
+        public void Loop(bool isLooping)
+        {
+            _isLooping = isLooping;
+        }
+
+        public void PlayRandomSong()
+        {
+            var random = new Random();
+            int randomIndex;
+            do
+            {
+                randomIndex = random.Next(_songs.Count);
+            } while (randomIndex == _currentSongIndex);
+
+            _currentSongIndex = randomIndex;
+            PlayCurrentSong();
         }
     }
 }

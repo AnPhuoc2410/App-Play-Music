@@ -1,20 +1,13 @@
 ﻿using Microsoft.Win32;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SpotifyCheaper.MVVM.Models;
-using SpotifyCheaper.MVVM.Repositories;
 using SpotifyCheaper.MVVM.Services;
 using SpotifyCheaper.MVVM.Views;
-using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text.Json.Nodes;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace SpotifyCheaper
@@ -22,12 +15,12 @@ namespace SpotifyCheaper
     public partial class MainWindow : Window
     {
         private FileService fileService = new();
-        private MusicButtonFunction musicButton = new();
         private MusicService _musicService = new();
         private MediaPlayer _mediaPlayer = new();
+        private SongsService _songSerivce;
+        private MusicButtonService _musicButtonService;
 
         private bool _isPlaying = false;
-        private ObservableCollection<Song> _songs = new();
         private DispatcherTimer _timer;
         private int _currentSongIndex = -1;
         private bool _isShuffling = false;
@@ -38,36 +31,14 @@ namespace SpotifyCheaper
         public MainWindow()
         {
             InitializeComponent();
+            _songSerivce = new SongsService(fileService, _musicService);
+            _musicButtonService = new MusicButtonService(_mediaPlayer, _songSerivce.Songs);
             InitializePlayer();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
-           
-            List<int> lErrorList;
-
-            //Get Path
-            // Sau nay thay songPath = playList.Name;
-            string path = "songPath.json";
-            string fullPath = Directory.GetCurrentDirectory() + "\\" + path;
-            // Check File co hay ko neu ko co thi tao.
-            if (File.Exists(fullPath))
-            {
-                // Doc tat ca cac bai hat tren thu muc xong roi ghi ra cac bai bi loi ko import dc
-                string GetTotalSongInFile = fileService.OutJsonValue("songPath.json", "TotalSong");
-                if (GetTotalSongInFile != null)
-                {
-                    _songs = _musicService.GetMp3List(path, int.Parse(GetTotalSongInFile), out lErrorList);
-                    //Delete cac file bi loi
-                    if (lErrorList.Count != 0) _musicService.DeleteAndChangeTotalSong(path, _songs);
-
-                    // Lay tong cac bai sau khi chinh tong so bai lai
-                    GetTotalSongInFile = fileService.OutJsonValue("songPath.json", "TotalSong");
-                    _songIndex = int.Parse(GetTotalSongInFile) + 1;
-                }
-            }
-            
+            _songSerivce.LoadSongsFromJson();
             LoadSongs();
         }
         private void InitializePlayer()
@@ -82,7 +53,7 @@ namespace SpotifyCheaper
         private void LoadSongs()
         {
             SongListView.Items.Clear();
-            SongListView.ItemsSource = _songs;
+            SongListView.ItemsSource = _songSerivce.Songs;
 
         }
 
@@ -91,12 +62,12 @@ namespace SpotifyCheaper
             if (_isPlaying)
             {
                 _mediaPlayer.Pause();
-                PlayButton.Content = "⏯️"; 
+                PlayButton.Content = "⏯️";
             }
             else
             {
                 _mediaPlayer.Play();
-                PlayButton.Content = "⏸️"; 
+                PlayButton.Content = "⏸️";
             }
             _isPlaying = !_isPlaying;
         }
@@ -106,17 +77,14 @@ namespace SpotifyCheaper
         {
             if (SongListView.SelectedItem is Song selectedSong)
             {
-                _currentSongIndex = _songs.IndexOf(selectedSong);
+                _currentSongIndex = _songSerivce.Songs.IndexOf(selectedSong);
                 PlaySelectedSong(selectedSong);
             }
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentSongIndex >= 0 && _currentSongIndex < _songs.Count)
-            {
-                PlaySelectedSong(_songs[_currentSongIndex]);
-            }
+            PlayRandomSong();
         }
 
         private void Previous_Click(object sender, RoutedEventArgs e)
@@ -125,24 +93,33 @@ namespace SpotifyCheaper
             {
                 _currentSongIndex--;
                 SongListView.SelectedIndex = _currentSongIndex;
-                PlaySelectedSong(_songs[_currentSongIndex]);
+                PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
             }
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (_isShuffling && _songs.Count > 1)
+            if (_isShuffling && _songSerivce.Songs.Count > 1)
             {
                 PlayRandomSong();
                 SongListView.SelectedIndex = _currentSongIndex;
             }
-           else if (_currentSongIndex < _songs.Count - 1)
+            else
             {
-                _currentSongIndex++;
+                if (_currentSongIndex < _songSerivce.Songs.Count - 1)
+                {
+                    _currentSongIndex++;
+                }
+                else
+                {
+                    // Reset to the first song if it's the last song
+                    _currentSongIndex = 0;
+                }
                 SongListView.SelectedIndex = _currentSongIndex;
-                PlaySelectedSong(_songs[_currentSongIndex]);
+                PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
             }
         }
+
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             _isShuffling = ShuffleButton.IsChecked == true;
@@ -154,15 +131,14 @@ namespace SpotifyCheaper
             Random random = new Random();
             int randomIndex;
 
-            // Ensure the new random song is different from the last one
             do
             {
-                randomIndex = random.Next(0, _songs.Count);
+                randomIndex = random.Next(0, _songSerivce.Songs.Count);
             } while (randomIndex == _lastSongIndex);
 
             _currentSongIndex = randomIndex;
             _lastSongIndex = _currentSongIndex; // Update last played index
-            PlaySelectedSong(_songs[_currentSongIndex]); // Play the selected song
+            PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]); // Play the selected song
         }
 
         private void LoopButton_Click(object sender, RoutedEventArgs e)
@@ -213,7 +189,7 @@ namespace SpotifyCheaper
             {
                 _timer.Stop();
                 _isPlaying = false;
-                Next_Click(null, null);
+                Next_Click(null,null);
             }
         }
         private void DurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -226,19 +202,17 @@ namespace SpotifyCheaper
 
         private void DurationSlider_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // Get the clicked position within the slider
-            var slider = sender as Slider;
-            var mousePosition = e.GetPosition(slider);
+            if (sender is Slider slider)
+            {
+                var mousePosition = e.GetPosition(slider);
 
-            // Calculate the percentage of the slider's width that was clicked
-            double clickedPercentage = mousePosition.X / slider.ActualWidth;
+                double clickedPercentage = mousePosition.X / slider.ActualWidth;
 
-            // Calculate the new position in seconds based on the clicked percentage
-            double newPositionInSeconds = clickedPercentage * slider.Maximum;
+                double newPositionInSeconds = clickedPercentage * slider.Maximum;
 
-            // Set the slider value and update the MediaPlayer position
-            slider.Value = newPositionInSeconds;
-            _mediaPlayer.Position = TimeSpan.FromSeconds(newPositionInSeconds);
+                slider.Value = newPositionInSeconds;
+                _mediaPlayer.Position = TimeSpan.FromSeconds(newPositionInSeconds);
+            }
         }
 
 
@@ -262,48 +236,15 @@ namespace SpotifyCheaper
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-          
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.Filter = "MP3 Files | *.mp3";
-
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                foreach (var filePath in openFileDialog.FileNames)
-                {
-                    
-                    var metadata = _musicService.GetMp3Metadata(filePath);
-                    if (metadata != null)
-                    {
-                        _songs.Add(new Song
-                        {
-                            TrackNumber = _songIndex,
-                            Title = metadata.Title,
-                            Artist = metadata.Artist,
-                            Duration = metadata.Duration,
-                            FilePath = filePath,
-                            AlbumCoverImage = metadata.AlbumCoverImage,
-                        });
-                        _songIndex++;
-
-                    }
-              
-           
-                    else
-                    {
-                        MessageBox.Show($"Could not retrieve MP3 metadata for {filePath}.");
-                    }
-                }
-            }
-            string inS = _musicService.SongListToString(_songs);
-            JObject jsonListSong = JObject.Parse(inS);
-            jsonListSong["TotalSong"] = _songIndex-1;
-            bool success = fileService.InputJson("songPath.json", jsonListSong.ToString());
-            if (success)
-            {
+                _songSerivce.ImportSongs();
                 MessageBox.Show("Add song success", "Ok", MessageBoxButton.OK, MessageBoxImage.None);
             }
-            else MessageBox.Show("Add song unsuccess", "Ok", MessageBoxButton.OK, MessageBoxImage.Error);
+            catch (Exception)
+            {
+                MessageBox.Show("Add song unsuccess", "Ok", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void VideoButton_Click(object sender, RoutedEventArgs e)
@@ -311,44 +252,26 @@ namespace SpotifyCheaper
             VideoPlayerView videoPlayerView = new VideoPlayerView();
             this.Hide();
             videoPlayerView.ShowDialog();
-            
+
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            // Get the button that was clicked
-            var button = sender as Button;
-
-            // Get the song associated with this button
-            var songToDelete = button?.DataContext as Song;
-
-            if (songToDelete != null)
+            if (sender is Button button && button.DataContext is Song songToDelete)
             {
-                int currentIndex = _songs.IndexOf(songToDelete);
-
-                // Remove the song from the _songs collection
-                _songs.Remove(songToDelete);
-
-                // If there are still songs in the collection, select the next one
-                if (_songs.Count > 0)
-                {
-                    int nextIndex = currentIndex < _songs.Count ? currentIndex : _songs.Count - 1;
-                    SongListView.SelectedIndex = nextIndex;
-                    SongListView.ScrollIntoView(SongListView.SelectedItem);
-                }
+                _songSerivce.DeleteSong(songToDelete);
+                MessageBox.Show("Song deleted.", "Delete", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
 
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
         {
-            string sSearchName = SearchingTextBox.Text;
-            var displayListSong = musicButton.FindMusic(sSearchName, _songs);
+            string sSearchName = SearchingTextBox.Text.Trim();
+            var displayListSong = _songSerivce.FindMusic(sSearchName);
             //SongListView.Items.Clear();
             SongListView.ItemsSource = displayListSong;
 
         }
-
-       
     }
 }

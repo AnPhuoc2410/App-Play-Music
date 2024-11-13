@@ -1,7 +1,7 @@
-﻿using System.Net.Http;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SpotifyCheaper.MVVM.Services;
+using System.Net.Http;
+using System.Text;
 
 namespace SpotifyCheaper.MVVM.Repositories
 {
@@ -9,7 +9,7 @@ namespace SpotifyCheaper.MVVM.Repositories
     public class SpotifyRepository
     {
 
-         private FileService jSonService;
+        private FileService jSonService;
         private readonly HttpClient client;
         //public string StringToken ()
         //{

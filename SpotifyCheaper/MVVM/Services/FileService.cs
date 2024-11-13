@@ -1,10 +1,4 @@
 ﻿using SpotifyCheaper.MVVM.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace SpotifyCheaper.MVVM.Services
 {
@@ -17,7 +11,7 @@ namespace SpotifyCheaper.MVVM.Services
             return jsonRepository.InputJsonFile(file, value);
         }
 
-        public string OutJsonValue (string file, string value)
+        public string OutJsonValue(string file, string value)
         {
             jsonRepository = new FileRepository();
             return jsonRepository.GetJsonFile(file, value);
@@ -25,12 +19,12 @@ namespace SpotifyCheaper.MVVM.Services
 
         //public string 
 
-        public bool ChangeValue (string file,string key, string value)
+        public bool ChangeValue(string file, string key, string value)
         {
             jsonRepository = new FileRepository();
             return jsonRepository.ChangeJsonKeyValue(file, key, value);
         }
-        
+
         //public bool AddValue (string file,string key,string value)
         //{
 

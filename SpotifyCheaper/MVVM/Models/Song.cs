@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpotifyCheaper.MVVM.Models
+﻿namespace SpotifyCheaper.MVVM.Models
 {
     public class Song
     {
@@ -16,9 +10,8 @@ namespace SpotifyCheaper.MVVM.Models
 
         public string ToString()
         {
-            return Title +"|" + FilePath;
+            return Title + "|" + FilePath;
         }
-        public byte[] AlbumCoverImage { get; set; }
     }
 
 }
