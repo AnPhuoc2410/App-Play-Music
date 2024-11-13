@@ -7,24 +7,21 @@
         Icon="..\Resources\Images\spotify_logo.ico"
         Background="{StaticResource BackgroundBrush}"
         WindowStartupLocation="CenterScreen"
-        Title="My Music App" Height="800" Width="1200" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="My Music App" Height="800" Width="1200" ResizeMode="CanMinimize" Loaded="Window_Loaded">
     <DockPanel>
 
-        <!-- Sidebar -->
-        <StackPanel DockPanel.Dock="Left" Width="200" Background="#2d2d2d">
+        <!-- Left Sidebar -->
+        <StackPanel DockPanel.Dock="Left" Width="200" Background="#2D2D2D">
             <!-- Spotify Logo and Search Box -->
             <StackPanel Margin="10">
                 <TextBlock Text="Spotify Cheaper" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
                 <Grid>
                     <TextBox x:Name="SearchingTextBox" Width="180" Height="30" Margin="0,10,0,0" Background="Gray" Foreground="White"  />
                     <Button x:Name="SearchingButton" Content="Search" Height="30" Width="36" Margin="144,10,0,0" 
-        Click="SearchingButton_Click" FontSize="8" VerticalAlignment="Top" 
-        Background="{DynamicResource SelectedBackgroundBrush}" 
-        Style="{StaticResource HeaderButtonStyle}" />
-
-
+                    Click="SearchingButton_Click" FontSize="8" VerticalAlignment="Top" 
+                    Background="{DynamicResource SelectedBackgroundBrush}" 
+                    Style="{StaticResource HeaderButtonStyle}" />
                 </Grid>
-
             </StackPanel>
 
             <!-- Navigation Items -->
@@ -32,13 +29,17 @@
                 <Button Content="Browse" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="Activity" Style="{StaticResource NavButtonStyle}" />
                 <Button x:Name="VideoButton" Content="Video" Style="{StaticResource NavButtonStyle}" Click="VideoButton_Click"/>
-
                 <TextBlock Text="YOUR MUSIC" FontSize="14" FontWeight="Bold" Foreground="Gray" Margin="10,20,0,5"/>
                 <Button Content="Songs" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="Albums" Style="{StaticResource NavButtonStyle}" />
-                <Button Content="Artists" Style="{StaticResource NavButtonStyle}" />
+                <Button Content="PLaylist" Style="{StaticResource NavButtonStyle}" Click="ArtistsButton_Click" />
+                <!-- Artist ListBox (Initially Collapsed) -->
+                <ListBox x:Name="PlayListBox" ItemsSource="{Binding Playlist}" Background="#333" 
+                Foreground="White" Visibility="Collapsed" Margin="10,20,0,0" SelectionChanged="PlayListBox_SelectionChanged"/>
                 <Button x:Name="ImportButton" Content="Local Files" Style="{StaticResource NavButtonStyle}" Click="ImportButton_Click" />
             </StackPanel>
+
+            
         </StackPanel>
 
         <!-- Main Content Area -->
@@ -109,9 +110,12 @@
                            Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" />
 
                                 <!-- Delete Button -->
-                                <Button Content="Delete" Grid.Column="4" Width="75" Height="30" 
-                        HorizontalAlignment="Center" VerticalAlignment="Center" 
-                        Background="Red" Foreground="White" Click="DeleteButton_Click"/>
+                                <Button Grid.Column="4" Style="{StaticResource ControlButtonStyle}" 
+                                Click="DeleteButton_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="../Resources/Images/delete.png" Width="24" Height="30"/>
+                                    </StackPanel>
+                                </Button>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -134,7 +138,7 @@
                                VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0"/>
 
                     <!-- Duration Slider -->
-                    <Slider x:Name="DurationSlider" Minimum="0" Maximum="300" Value="50" 
+                    <Slider x:Name="DurationSlider" Minimum="0" Maximum="300" Value="00" 
                             VerticalAlignment="Center" Grid.Column="1" Margin="10,0" Style="{StaticResource GreenSlider}" 
                             ValueChanged="DurationSlider_ValueChanged" PreviewMouseDown="DurationSlider_PreviewMouseDown"/>
 
@@ -145,7 +149,7 @@
 
                 <!-- Current Track Info on the Left -->
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="10" Width="200" MaxWidth="200">
-                    <Image Width="50" Height="50" Source="https://i.ytimg.com/vi/3Yq58d2rsRk/maxresdefault.jpg" Margin="5"/>
+                    <Image x:Name="SongImage" Width="50" Height="50" Source="https://i.ytimg.com/vi/3Yq58d2rsRk/maxresdefault.jpg" Margin="5"/>
                     <StackPanel Margin="5">
                         <TextBlock x:Name="TrackTitleTextBlock" Text="Track Title" FontSize="16" Foreground="White" Margin="0,0,0,5" 
                                    TextTrimming="CharacterEllipsis" MaxWidth="120"/>
@@ -154,24 +158,48 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Playback Controls in the Center -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="145,0,0,0">
-                    <Button x:Name="PreviousButton" Content="⏮️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Previous_Click"/>
-                    <Button x:Name="PlayButton" Content="⏯️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="PlayPause_Click"/>
-                    <Button x:Name="NextButton" Content="⏭️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Next_Click"/>
-                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="130,0,0,0">
+                    <!-- Previous Button -->
+                    <Button x:Name="PreviousButton" Style="{StaticResource ControlButtonStyle}" Margin="10,0" Click="Previous_Click">
+                        <Image Source="../Resources/Images/previous.png" Width="24" Height="24"/>
+                    </Button>
 
-                <!-- Add Loop and Shuffle buttons in Playback Controls -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
-                    <ToggleButton x:Name="ShuffleButton" Content="🔀" Style="{StaticResource ControlToggleButtonStyle}" Margin="5" Click="ShuffleButton_Click"/>
-                    <ToggleButton x:Name="LoopButton" Content="🔁" Style="{StaticResource ControlToggleButtonStyle}" Margin="5" Click="LoopButton_Click"/>
-                </StackPanel>
+                    <!-- Play/Pause Button -->
+                    <Button x:Name="PlayButton" Style="{StaticResource ControlButtonStyle}" Margin="10,0" Click="PlayPause_Click">
+                        <Image Source="../Resources/Images/play.png" Width="24" Height="24"/>
+                    </Button>
 
+                    <!-- Next Button -->
+                    <Button x:Name="NextButton" Style="{StaticResource ControlButtonStyle}" Margin="10,0" Click="Next_Click">
+                        <Image Source="../Resources/Images/next.png" Width="24" Height="24"/>
+                    </Button>
+
+                    <!-- Shuffle Button -->
+                    <ToggleButton x:Name="ShuffleButton" Style="{StaticResource ControlToggleButtonStyle}" Margin="10,0" Click="ShuffleButton_Click">
+                        <Image x:Name="ShuffleIcon" Source="../Resources/Images/no_shuffle.png" Width="24" Height="24"/>
+                        <ToggleButton.ToolTip>
+                            <ToolTip Content="Shuffle: Off" />
+                        </ToggleButton.ToolTip>
+                    </ToggleButton>
+
+                    <!-- Loop Button -->
+                    <ToggleButton x:Name="LoopButton" Style="{StaticResource ControlToggleButtonStyle}" Margin="5" Click="LoopButton_Click">
+                        <Image x:Name="LoopIcon" Source="../Resources/Images/no_repeat.png" Width="24" Height="24"/>
+                        <ToggleButton.ToolTip>
+                            <ToolTip Content="Loop: Off" />
+                        </ToggleButton.ToolTip>
+                    </ToggleButton>
+                </StackPanel>
 
                 <!-- Volume Control on the Right in the same line -->
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="170,0,0,0" Width="173">
-                    <Button Content="🔊" Style="{StaticResource ControlButtonStyle}" Click="Mute_Click"/>
-                    <Slider x:Name="VolumeSlider" Width="100" Minimum="0" Maximum="1" Value="0.5" ValueChanged="VolumeSlider_ValueChanged" Margin="10,30,10,0"/>
+                <StackPanel x:Name="VolumeButton" DockPanel.Dock="Right" Orientation="Horizontal" Margin="170,10,0,10" Width="173">
+                    <Button x:Name="MuteButton" Style="{StaticResource ControlButtonStyle}" Click="Mute_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="VolumeIcon" Source="../Resources/Images/low_volume.png" Width="30" Height="30"/>
+                        </StackPanel>
+                    </Button>
+                    <Slider x:Name="VolumeSlider" Width="100" Minimum="0" Maximum="1" Value="0.5" 
+            ValueChanged="VolumeSlider_ValueChanged" Margin="15,15,10,10"/>
                 </StackPanel>
             </DockPanel>
         </Grid>
