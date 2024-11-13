@@ -134,7 +134,7 @@
                                VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0"/>
 
                     <!-- Duration Slider -->
-                    <Slider x:Name="DurationSlider" Minimum="0" Maximum="300" Value="50" 
+                    <Slider x:Name="DurationSlider" Minimum="0" Maximum="300" Value="00" 
                             VerticalAlignment="Center" Grid.Column="1" Margin="10,0" Style="{StaticResource GreenSlider}" 
                             ValueChanged="DurationSlider_ValueChanged" PreviewMouseDown="DurationSlider_PreviewMouseDown"/>
 
@@ -145,7 +145,7 @@
 
                 <!-- Current Track Info on the Left -->
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="10" Width="200" MaxWidth="200">
-                    <Image Width="50" Height="50" Source="https://i.ytimg.com/vi/3Yq58d2rsRk/maxresdefault.jpg" Margin="5"/>
+                    <Image x:Name="SongImage" Width="50" Height="50" Source="https://i.ytimg.com/vi/3Yq58d2rsRk/maxresdefault.jpg" Margin="5"/>
                     <StackPanel Margin="5">
                         <TextBlock x:Name="TrackTitleTextBlock" Text="Track Title" FontSize="16" Foreground="White" Margin="0,0,0,5" 
                                    TextTrimming="CharacterEllipsis" MaxWidth="120"/>
@@ -154,18 +154,39 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Playback Controls in the Center -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="145,0,0,0">
-                    <Button x:Name="PreviousButton" Content="⏮️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Previous_Click"/>
-                    <Button x:Name="PlayButton" Content="⏯️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="PlayPause_Click"/>
-                    <Button x:Name="NextButton" Content="⏭️" Style="{StaticResource ControlButtonStyle}" Margin="5" Click="Next_Click"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="90,0,0,0">
+                    <!-- Previous Button -->
+                    <Button x:Name="PreviousButton" Style="{StaticResource ControlButtonStyle}" Margin="10,0" Click="Previous_Click">
+                        <Image Source="../Resources/Images/previous.png" Width="24" Height="24"/>
+                    </Button>
+
+                    <!-- Play/Pause Button -->
+                    <Button x:Name="PlayButton" Style="{StaticResource ControlButtonStyle}" Margin="10,0" Click="PlayPause_Click">
+                        <Image Source="../Resources/Images/play.png" Width="24" Height="24"/>
+                    </Button>
+
+                    <!-- Next Button -->
+                    <Button x:Name="NextButton" Style="{StaticResource ControlButtonStyle}" Margin="10,0" Click="Next_Click">
+                        <Image Source="../Resources/Images/next.png" Width="24" Height="24"/>
+                    </Button>
+
+                    <!-- Shuffle Button -->
+                    <ToggleButton x:Name="ShuffleButton" Style="{StaticResource ControlToggleButtonStyle}" Margin="10,0" Click="ShuffleButton_Click">
+                        <Image x:Name="ShuffleIcon" Source="../Resources/Images/no_shuffle.png" Width="24" Height="24"/>
+                        <ToggleButton.ToolTip>
+                            <ToolTip Content="Shuffle: Off" />
+                        </ToggleButton.ToolTip>
+                    </ToggleButton>
+
+                    <!-- Loop Button -->
+                    <ToggleButton x:Name="LoopButton" Style="{StaticResource ControlToggleButtonStyle}" Margin="5" Click="LoopButton_Click">
+                        <Image x:Name="LoopIcon" Source="../Resources/Images/no_repeat.png" Width="24" Height="24"/>
+                        <ToggleButton.ToolTip>
+                            <ToolTip Content="Loop: Off" />
+                        </ToggleButton.ToolTip>
+                    </ToggleButton>
                 </StackPanel>
 
-                <!-- Add Loop and Shuffle buttons in Playback Controls -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
-                    <ToggleButton x:Name="ShuffleButton" Content="🔀" Style="{StaticResource ControlToggleButtonStyle}" Margin="5" Click="ShuffleButton_Click"/>
-                    <ToggleButton x:Name="LoopButton" Content="🔁" Style="{StaticResource ControlToggleButtonStyle}" Margin="5" Click="LoopButton_Click"/>
-                </StackPanel>
 
 
                 <!-- Volume Control on the Right in the same line -->
