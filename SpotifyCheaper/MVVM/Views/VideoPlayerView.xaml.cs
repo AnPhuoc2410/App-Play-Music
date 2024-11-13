@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using SpotifyCheaper.MVVM.Services;
+using System.Windows.Controls;
 
 namespace SpotifyCheaper.MVVM.Views
 {
