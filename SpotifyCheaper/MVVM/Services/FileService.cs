@@ -29,5 +29,15 @@ namespace SpotifyCheaper.MVVM.Services
         //{
 
         //}
+        public void Save(List<string> videoPaths)
+        {
+            jsonRepository = new FileRepository();
+            jsonRepository.SaveVideoPaths(videoPaths);
+        }
+        public List<string> LoadVideoPaths()
+        {
+            jsonRepository = new FileRepository();
+            return jsonRepository.LoadVideoPaths();
+        }
     }
 }

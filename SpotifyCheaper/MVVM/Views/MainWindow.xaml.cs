@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.Services;
 using SpotifyCheaper.MVVM.Views;
+using SpotifyCheaper.ViewModels;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
@@ -48,6 +49,18 @@ namespace SpotifyCheaper
             _songSerivce.LoadSongsFromJson();
             LoadSongs();
         }
+
+        private void ArtistsButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayListBox.Visibility = PlayListBox.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+
+            // Optionally, bind data here if not already bound in your ViewModel setup
+            DataContext = new MainViewModel();
+        }
+
+
+
+
         private void InitializePlayer()
         {
             _timer = new DispatcherTimer
@@ -122,7 +135,7 @@ namespace SpotifyCheaper
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (_isLooping) 
+            if (_isLooping)
             {
                 PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
             }
@@ -171,7 +184,7 @@ namespace SpotifyCheaper
             } while (randomIndex == _lastSongIndex);
 
             _currentSongIndex = randomIndex;
-            _lastSongIndex = _currentSongIndex; 
+            _lastSongIndex = _currentSongIndex;
             PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
         }
 
@@ -205,7 +218,7 @@ namespace SpotifyCheaper
 
         private void PlaySelectedSong(Song song)
         {
-            string filePath = song.FilePath; 
+            string filePath = song.FilePath;
 
             _mediaPlayer.Stop();
             _timer.Stop();
@@ -369,7 +382,7 @@ namespace SpotifyCheaper
         private void VideoButton_Click(object sender, RoutedEventArgs e)
         {
             VideoPlayerView videoPlayerView = new VideoPlayerView();
-            if(_isPlaying)
+            if (_isPlaying)
             {
                 _mediaPlayer.Pause();
                 _isPlaying = false;
@@ -382,7 +395,7 @@ namespace SpotifyCheaper
         {
             if (sender is Button button && button.DataContext is Song songToDelete)
             {
-                if(_currentSongIndex >= 0 && _songSerivce.Songs.IndexOf(songToDelete) == _currentSongIndex)
+                if (_currentSongIndex >= 0 && _songSerivce.Songs.IndexOf(songToDelete) == _currentSongIndex)
                 {
                     _mediaPlayer.Stop();
                     _timer.Stop();
@@ -390,7 +403,7 @@ namespace SpotifyCheaper
 
                     TrackTitleTextBlock.Text = string.Empty;
                     ArtistTitleTextBox.Text = string.Empty;
-                    DurationTextBlock.Text = "00:00"; 
+                    DurationTextBlock.Text = "00:00";
                     DurationSlider.Value = 0.0;
                     CurrentPositionTextBlock.Text = "00:00";
                 }
@@ -401,6 +414,7 @@ namespace SpotifyCheaper
                     Width = 24,
                     Height = 24
                 };
+                _musicService.DeleteAndChangeTotalSong("songPath.json", _songSerivce.Songs);
                 MessageBox.Show("Song deleted.", "Delete", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -414,9 +428,15 @@ namespace SpotifyCheaper
             SongListView.ItemsSource = displayListSong;
 
         }
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+
+        private void PlayListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized; // Minimize the window
+            if (PlayListBox.SelectedItem != null)
+            {
+
+                string selectedArtist = PlayListBox.SelectedItem.ToString();
+
+            }
         }
     }
 }
