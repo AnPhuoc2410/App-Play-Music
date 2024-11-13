@@ -4,8 +4,8 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Google.Apis.YouTube.v3;
 using SpotifyCheaper.MVVM.Services;
+using SpotifyCheaper.MVVM.Models;
 
 namespace SpotifyCheaper.MVVM.Views
 {

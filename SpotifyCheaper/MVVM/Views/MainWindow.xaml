@@ -35,7 +35,7 @@
                 <Button Content="PLaylist" Style="{StaticResource NavButtonStyle}" Click="ArtistsButton_Click" />
                 <!-- Artist ListBox (Initially Collapsed) -->
                 <ListBox x:Name="PlayListBox" ItemsSource="{Binding Playlist}" Background="#333" 
-                Foreground="White" Visibility="Collapsed" Margin="10,20,0,0" SelectionChanged="PlayListBox_SelectionChanged"/>
+                Foreground="White" Visibility="Collapsed" Margin="10,20,0,0"/>
                 <Button x:Name="ImportButton" Content="Local Files" Style="{StaticResource NavButtonStyle}" Click="ImportButton_Click" />
             </StackPanel>
 
