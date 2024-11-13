@@ -282,8 +282,6 @@ namespace SpotifyCheaper
             {
                 _timer.Stop();
                 _isPlaying = false;
-
-                // Move to the next song according to repeat/loop/shuffle rules
                 Next_Click(null, null);
             }
         }
@@ -429,14 +427,5 @@ namespace SpotifyCheaper
 
         }
 
-        private void PlayListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (PlayListBox.SelectedItem != null)
-            {
-              
-                string selectedArtist = PlayListBox.SelectedItem.ToString();
-
-            }
-        }
     }
 }
