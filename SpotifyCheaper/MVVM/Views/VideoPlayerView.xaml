@@ -57,9 +57,9 @@
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,277,0,0" HorizontalAlignment="Center" Grid.Row="1">
             <!-- Progress Bar Simulation -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
-                <TextBlock Text="00:00" VerticalAlignment="Center" Foreground="White" Margin="10,0"/>
-                <Slider Width="300" Minimum="0" Maximum="100" Value="0" VerticalAlignment="Center" Margin="5"/>
-                <TextBlock Text="00:00" VerticalAlignment="Center" Foreground="White" Margin="10,0"/>
+                <TextBlock x:Name="CurrentPositionTextBlock"  Text="00:00" VerticalAlignment="Center" Foreground="White" Margin="10,0"/>
+                <Slider x:Name="DurationBar"  Width="300" Minimum="0" Maximum="100" Value="0" VerticalAlignment="Center" Margin="5" ValueChanged="DurationBar_ValueChanged" PreviewMouseDown="DurationSlider_PreviewMouseDown"/>
+                <TextBlock x:Name="DurationTextBox"  Text="00:00" VerticalAlignment="Center" Foreground="White" Margin="10,0"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
