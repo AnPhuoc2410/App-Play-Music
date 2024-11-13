@@ -264,7 +264,8 @@ namespace SpotifyCheaper
                             Title = metadata.Title,
                             Artist = metadata.Artist,
                             Duration = metadata.Duration,
-                            FilePath = filePath  // Store the file path
+                            FilePath = filePath,
+                            AlbumCoverImage = metadata.AlbumCoverImage,
                         });
                         _songIndex++;
                     }
@@ -281,6 +282,32 @@ namespace SpotifyCheaper
             VideoPlayerView videoPlayerView = new VideoPlayerView();
             videoPlayerView.ShowDialog();
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the button that was clicked
+            var button = sender as Button;
+
+            // Get the song associated with this button
+            var songToDelete = button?.DataContext as Song;
+
+            if (songToDelete != null)
+            {
+                int currentIndex = _songs.IndexOf(songToDelete);
+
+                // Remove the song from the _songs collection
+                _songs.Remove(songToDelete);
+
+                // If there are still songs in the collection, select the next one
+                if (_songs.Count > 0)
+                {
+                    int nextIndex = currentIndex < _songs.Count ? currentIndex : _songs.Count - 1;
+                    SongListView.SelectedIndex = nextIndex;
+                    SongListView.ScrollIntoView(SongListView.SelectedItem);
+                }
+            }
+        }
+
 
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
         {

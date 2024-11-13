@@ -2,10 +2,12 @@
 using SpotifyCheaper.MVVM.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace SpotifyCheaper.MVVM.Services
 {
@@ -22,17 +24,26 @@ namespace SpotifyCheaper.MVVM.Services
             {
                 var file = TagLib.File.Create(filePath);
 
-                // Get the title and duration from the MP3 file
+                // Get the title, duration, and artist from the MP3 file
                 string title = Path.GetFileName(filePath);
                 TimeSpan duration = file.Properties.Duration;
                 string artist = file.Tag.FirstPerformer ?? "Unknown Artist";
+
+                // Get the album cover image if available
+                byte[] imageData = null;
+                if (file.Tag.Pictures.Length > 0)
+                {
+                    var picture = file.Tag.Pictures[0];
+                    imageData = picture.Data.Data;
+                }
 
                 return new Song
                 {
                     TrackNumber = 1,
                     Title = title,
                     Duration = duration.ToString(@"mm\:ss"),
-                    Artist = artist
+                    Artist = artist,
+                    AlbumCoverImage = imageData
                 };
             }
             catch (Exception ex)
@@ -42,5 +53,21 @@ namespace SpotifyCheaper.MVVM.Services
                 return null;
             }
         }
+        public BitmapImage ConvertToImage(byte[] imageData)
+        {
+            if (imageData == null || imageData.Length == 0) return null;
+
+            using (var ms = new MemoryStream(imageData))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.StreamSource = ms;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+                image.Freeze();
+                return image;
+            }
+        }
+
     }
 }

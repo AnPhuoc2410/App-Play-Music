@@ -81,45 +81,42 @@
                             <Grid Width="935">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"/>
-                                    <!-- Width for Track Number -->
+                                    <!-- Track Number Column -->
                                     <ColumnDefinition Width="2*"/>
-                                    <!-- Width for Title -->
+                                    <!-- Title Column -->
                                     <ColumnDefinition Width="200"/>
-                                    <!-- Width for Artist -->
+                                    <!-- Artist Column -->
                                     <ColumnDefinition Width="75"/>
-                                    <!-- Width for Duration -->
+                                    <!-- Duration Column -->
+                                    <ColumnDefinition Width="100"/>
+                                    <!-- Delete Button Column -->
                                 </Grid.ColumnDefinitions>
 
                                 <!-- Track Number -->
-                                <TextBlock Text="{Binding TrackNumber}"   
-                               FontSize="16" Foreground="White"   
-                               HorizontalAlignment="Center"  
-                               VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding TrackNumber}" FontSize="16" Foreground="White" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
 
                                 <!-- Title with text trimming -->
-                                <TextBlock Text="{Binding Title}"   
-                               FontSize="16" Foreground="White"  
-                               Grid.Column="1" Margin="10,0,0,0"  
-                               TextTrimming="CharacterEllipsis"  
-                               MaxWidth="300" />
+                                <TextBlock Text="{Binding Title}" FontSize="16" Foreground="White" 
+                           Grid.Column="1" Margin="10,0,0,0" TextTrimming="CharacterEllipsis" MaxWidth="300" />
 
                                 <!-- Artist -->
-                                <TextBlock Text="{Binding Artist}"   
-                               FontSize="14" Foreground="LightGray"  
-                               Grid.Column="2" VerticalAlignment="Center"   
-                               HorizontalAlignment="Left"   
-                               Margin="10,0,0,0" />
+                                <TextBlock Text="{Binding Artist}" FontSize="14" Foreground="LightGray" 
+                           Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" />
 
                                 <!-- Duration aligned to the right -->
-                                <TextBlock Text="{Binding Duration}"   
-                               FontSize="14" Foreground="Gray"  
-                               Grid.Column="3" VerticalAlignment="Center"   
-                               HorizontalAlignment="Right"   
-                               Margin="0,0,10,0" />
+                                <TextBlock Text="{Binding Duration}" FontSize="14" Foreground="Gray" 
+                           Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" />
+
+                                <!-- Delete Button -->
+                                <Button Content="Delete" Grid.Column="4" Width="75" Height="30" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center" 
+                        Background="Red" Foreground="White" Click="DeleteButton_Click"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+
             </ListView>
 
             <!-- Playback Controls -->

@@ -13,6 +13,7 @@ namespace SpotifyCheaper.MVVM.Models
         public string Artist { get; set; }
         public string Duration { get; set; }
         public string FilePath { get; set; }
+        public byte[] AlbumCoverImage { get; set; }
     }
 
 }
