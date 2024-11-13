@@ -109,9 +109,12 @@
                            Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" />
 
                                 <!-- Delete Button -->
-                                <Button Content="Delete" Grid.Column="4" Width="75" Height="30" 
-                        HorizontalAlignment="Center" VerticalAlignment="Center" 
-                        Background="Red" Foreground="White" Click="DeleteButton_Click"/>
+                                <Button Grid.Column="4" Style="{StaticResource ControlButtonStyle}" 
+                                Click="DeleteButton_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="../Resources/Images/delete.png" Width="24" Height="30"/>
+                                    </StackPanel>
+                                </Button>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -154,7 +157,7 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="90,0,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="130,0,0,0">
                     <!-- Previous Button -->
                     <Button x:Name="PreviousButton" Style="{StaticResource ControlButtonStyle}" Margin="10,0" Click="Previous_Click">
                         <Image Source="../Resources/Images/previous.png" Width="24" Height="24"/>
@@ -187,12 +190,15 @@
                     </ToggleButton>
                 </StackPanel>
 
-
-
                 <!-- Volume Control on the Right in the same line -->
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="170,0,0,0" Width="173">
-                    <Button Content="🔊" Style="{StaticResource ControlButtonStyle}" Click="Mute_Click"/>
-                    <Slider x:Name="VolumeSlider" Width="100" Minimum="0" Maximum="1" Value="0.5" ValueChanged="VolumeSlider_ValueChanged" Margin="10,30,10,0"/>
+                <StackPanel x:Name="VolumeButton" DockPanel.Dock="Right" Orientation="Horizontal" Margin="170,10,0,10" Width="173">
+                    <Button x:Name="MuteButton" Style="{StaticResource ControlButtonStyle}" Click="Mute_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="VolumeIcon" Source="../Resources/Images/low_volume.png" Width="30" Height="30"/>
+                        </StackPanel>
+                    </Button>
+                    <Slider x:Name="VolumeSlider" Width="100" Minimum="0" Maximum="1" Value="0.5" 
+            ValueChanged="VolumeSlider_ValueChanged" Margin="15,15,10,10"/>
                 </StackPanel>
             </DockPanel>
         </Grid>

@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MVVM\Resources\Images\default_album.png" />
+    <None Remove="MVVM\Resources\Images\delete.png" />
+    <None Remove="MVVM\Resources\Images\low_volume.png" />
+    <None Remove="MVVM\Resources\Images\max_volume.png" />
+    <None Remove="MVVM\Resources\Images\mute_volume.png" />
     <None Remove="MVVM\Resources\Images\next.png" />
     <None Remove="MVVM\Resources\Images\no_repeat.png" />
     <None Remove="MVVM\Resources\Images\no_shuffle.png" />
@@ -23,6 +28,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="MVVM\Resources\Images\default_album.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MVVM\Resources\Images\delete.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MVVM\Resources\Images\low_volume.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MVVM\Resources\Images\mute_volume.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MVVM\Resources\Images\next.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -48,6 +65,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="MVVM\Resources\Images\shuffle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MVVM\Resources\Images\max_volume.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -73,7 +73,6 @@ namespace SpotifyCheaper.MVVM.Services
                             Artist = metadata.Artist,
                             Duration = metadata.Duration,
                             FilePath = filePath,
-                            AlbumArt = metadata.AlbumArt // Add this line
                         });
                         _songIndex++;
                     }

@@ -66,13 +66,18 @@ namespace SpotifyCheaper
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
         {
+            if (SongListView.SelectedItem is null)
+            {
+                MessageBox.Show("Please select a song to play", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             if (_isPlaying)
             {
                 _mediaPlayer.Pause();
                 // Set to pause icon using direct path
                 PlayButton.Content = new Image
                 {
-                    Source = new BitmapImage(new Uri(@"..\Resources\Images\pause.png", UriKind.Relative)),
+                    Source = new BitmapImage(new Uri(@"..\Resources\Images\play.png", UriKind.Relative)),
                     Width = 24,
                     Height = 24
                 };
@@ -82,7 +87,7 @@ namespace SpotifyCheaper
                 _mediaPlayer.Play();
                 PlayButton.Content = new Image
                 {
-                    Source = new BitmapImage(new Uri(@"..\Resources\Images\play.png", UriKind.Relative)),
+                    Source = new BitmapImage(new Uri(@"..\Resources\Images\pause.png", UriKind.Relative)),
                     Width = 24,
                     Height = 24
                 };
@@ -200,7 +205,7 @@ namespace SpotifyCheaper
 
         private void PlaySelectedSong(Song song)
         {
-            string filePath = song.FilePath;  // Use the dynamic file path from the Song object
+            string filePath = song.FilePath; 
 
             _mediaPlayer.Stop();
             _timer.Stop();
@@ -210,14 +215,15 @@ namespace SpotifyCheaper
             {
                 TrackTitleTextBlock.Text = metadata.Title;
                 ArtistTitleTextBox.Text = metadata.Artist;
-                string durationString = metadata.Duration;
-                TimeSpan duration = TimeSpan.ParseExact(durationString, @"mm\:ss", null);
+
+                TimeSpan duration = TimeSpan.ParseExact(metadata.Duration, @"mm\:ss", null);
                 DurationSlider.Maximum = duration.TotalSeconds;
                 DurationTextBlock.Text = metadata.Duration;
 
                 _mediaPlayer.Open(new Uri(filePath));
                 _mediaPlayer.Play();
                 _isPlaying = true;
+
                 PlayButton.Content = new Image
                 {
                     Source = new BitmapImage(new Uri(@"..\Resources\Images\pause.png", UriKind.Relative)),
@@ -227,10 +233,10 @@ namespace SpotifyCheaper
 
                 _timer.Start();
 
-                // Set album art
-                if (song.AlbumArt != null && song.AlbumArt.Length > 0)
+                // Handle album art if available
+                if (metadata.AlbumArt != null && metadata.AlbumArt.Length > 0)
                 {
-                    using (var ms = new MemoryStream(song.AlbumArt))
+                    using (var ms = new MemoryStream(metadata.AlbumArt))
                     {
                         var image = new BitmapImage();
                         image.BeginInit();
@@ -242,16 +248,15 @@ namespace SpotifyCheaper
                 }
                 else
                 {
-                    SongImage.Source = null; // Clear the image if no album art is available
+                    // Set a default image if no album art is available
+                    SongImage.Source = new BitmapImage(new Uri(@"..\Resources\Images\default_album.png", UriKind.Relative));
                 }
             }
             else
             {
-                MessageBox.Show("Could not retrieve MP3 metadata.");
+                MessageBox.Show("Could not retrieve MP3!");
             }
         }
-
-
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -303,13 +308,50 @@ namespace SpotifyCheaper
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            _mediaPlayer.Volume = e.NewValue;
+            _mediaPlayer.Volume = e.NewValue; // Set the volume to the slider's new value
+
+            // Update the icon and tooltip based on the volume level
+            if (_mediaPlayer.Volume == 0)
+            {
+                VolumeIcon.Source = new BitmapImage(new Uri(@"..\Resources\Images\mute_volume.png", UriKind.Relative));
+                VolumeButton.ToolTip = "Audio: Mute";
+            }
+            else if (_mediaPlayer.Volume > 0 && _mediaPlayer.Volume <= 0.5)
+            {
+                VolumeIcon.Source = new BitmapImage(new Uri(@"..\Resources\Images\low_volume.png", UriKind.Relative));
+                VolumeButton.ToolTip = "Audio: Low Volume";
+            }
+            else
+            {
+                VolumeIcon.Source = new BitmapImage(new Uri(@"..\Resources\Images\max_volume.png", UriKind.Relative));
+                VolumeButton.ToolTip = "Audio: Max Volume";
+            }
         }
+
 
         private void Mute_Click(object sender, RoutedEventArgs e)
         {
-            _mediaPlayer.Volume = _mediaPlayer.Volume > 0 ? 0 : 0.5;
-            VolumeSlider.Value = _mediaPlayer.Volume;
+            if (_mediaPlayer.Volume == 0)
+            {
+                _mediaPlayer.Volume = 0.5; // Set to low volume
+                VolumeSlider.Value = _mediaPlayer.Volume;
+                VolumeIcon.Source = new BitmapImage(new Uri(@"..\Resources\Images\low_volume.png", UriKind.Relative));
+                VolumeButton.ToolTip = "Audio: Low Volume";
+            }
+            else if (_mediaPlayer.Volume == 0.5)
+            {
+                _mediaPlayer.Volume = 1.0; // Set to max volume
+                VolumeSlider.Value = _mediaPlayer.Volume;
+                VolumeIcon.Source = new BitmapImage(new Uri(@"..\Resources\Images\max_volume.png", UriKind.Relative));
+                VolumeButton.ToolTip = "Audio: Max Volume";
+            }
+            else
+            {
+                _mediaPlayer.Volume = 0;
+                VolumeSlider.Value = _mediaPlayer.Volume;
+                VolumeIcon.Source = new BitmapImage(new Uri(@"..\Resources\Images\mute_volume.png", UriKind.Relative));
+                VolumeButton.ToolTip = "Audio: Muted";
+            }
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
@@ -317,7 +359,6 @@ namespace SpotifyCheaper
             try
             {
                 _songSerivce.ImportSongs();
-                MessageBox.Show("Add song success", "Ok", MessageBoxButton.OK, MessageBoxImage.None);
             }
             catch (Exception)
             {
@@ -328,16 +369,38 @@ namespace SpotifyCheaper
         private void VideoButton_Click(object sender, RoutedEventArgs e)
         {
             VideoPlayerView videoPlayerView = new VideoPlayerView();
+            if(_isPlaying)
+            {
+                _mediaPlayer.Pause();
+                _isPlaying = false;
+            }
             this.Hide();
             videoPlayerView.ShowDialog();
-
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.DataContext is Song songToDelete)
             {
+                if(_currentSongIndex >= 0 && _songSerivce.Songs.IndexOf(songToDelete) == _currentSongIndex)
+                {
+                    _mediaPlayer.Stop();
+                    _timer.Stop();
+                    _isPlaying = false;
+
+                    TrackTitleTextBlock.Text = string.Empty;
+                    ArtistTitleTextBox.Text = string.Empty;
+                    DurationTextBlock.Text = "00:00"; 
+                    DurationSlider.Value = 0.0;
+                    CurrentPositionTextBlock.Text = "00:00";
+                }
                 _songSerivce.DeleteSong(songToDelete);
+                PlayButton.Content = new Image
+                {
+                    Source = new BitmapImage(new Uri(@"..\Resources\Images\play.png", UriKind.Relative)),
+                    Width = 24,
+                    Height = 24
+                };
                 MessageBox.Show("Song deleted.", "Delete", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -350,6 +413,10 @@ namespace SpotifyCheaper
             //SongListView.Items.Clear();
             SongListView.ItemsSource = displayListSong;
 
+        }
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized; // Minimize the window
         }
     }
 }
