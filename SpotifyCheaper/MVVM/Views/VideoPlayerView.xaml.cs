@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using SpotifyCheaper.MVVM.Services;
 using SpotifyCheaper.MVVM.Models;
+using System.Collections.ObjectModel;
 
 namespace SpotifyCheaper.MVVM.Views
 {
@@ -14,7 +15,7 @@ namespace SpotifyCheaper.MVVM.Views
     /// </summary>
     public partial class VideoPlayerView : Window
     {
-        
+
         private DispatcherTimer _timer;
         private bool _isPlaying = false;
         private bool _isDragging = false;
@@ -28,6 +29,7 @@ namespace SpotifyCheaper.MVVM.Views
         private DispatcherTimer _hideTimer;
         private bool _controlsVisible = true;
         private int _currentVideoIndex = -1;
+
 
 
         public VideoPlayerView()
@@ -48,6 +50,12 @@ namespace SpotifyCheaper.MVVM.Views
             // Start by showing controls
             ShowControls();
 
+        }
+
+        private void LoadVideos()
+        {
+            VideoListView.Items.Clear();
+            VideoListView.ItemsSource = _videoService.Videos;
         }
 
 
@@ -115,6 +123,7 @@ namespace SpotifyCheaper.MVVM.Views
             try
             {
                 _videoService.ImportVideos();
+
                 MessageBox.Show("Add video success", "Ok", MessageBoxButton.OK, MessageBoxImage.None);
             }
             catch (Exception)
@@ -144,7 +153,8 @@ namespace SpotifyCheaper.MVVM.Views
             {
                 // Stop playback, reset media state, and update the UI
                 mediaElement.Stop();
-                mediaElement.Source = null; // Unset the source if you want to "close" the video
+                VideoListView.Visibility = Visibility.Visible;
+                // Unset the source if you want to "close" the video
 
                 _isPlaying = false;
                 PlayButton.Content = "⏯️";
@@ -290,10 +300,21 @@ namespace SpotifyCheaper.MVVM.Views
 
                 _timer.Start();
             }
+            if (_isPlaying)
+            {
+                VideoListView.Visibility = Visibility.Collapsed;
+            }
+
             else
             {
                 MessageBox.Show("Could not retrieve MP4 metadata.");
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _videoService.LoadVideosFromJson();
+            LoadVideos();
         }
     }
 }
