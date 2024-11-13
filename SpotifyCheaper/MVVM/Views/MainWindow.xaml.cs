@@ -189,7 +189,7 @@ namespace SpotifyCheaper
             {
                 _timer.Stop();
                 _isPlaying = false;
-                Next_Click(null,null);
+                Next_Click(null, null);
             }
         }
         private void DurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -273,5 +273,9 @@ namespace SpotifyCheaper
             SongListView.ItemsSource = displayListSong;
 
         }
+
+
+  
+        
     }
 }

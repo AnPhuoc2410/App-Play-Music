@@ -137,5 +137,27 @@ namespace SpotifyCheaper.MVVM.Repositories
                 return false;
             }
         }
+        public void SaveVideoPaths(List<string> videoPaths)
+        {
+            string filePath = "videoLocation.txt"; // You can choose a location for the file
+
+            // Write the list of video paths to a file
+            File.WriteAllLines(filePath, videoPaths);
+        }
+        public List<string> LoadVideoPaths()
+        {
+            string filePath = "videoLocation.txt"; // Same file where paths are saved
+
+            if (File.Exists(filePath))
+            {
+                // Read all lines from the file and return them as a list
+                return File.ReadAllLines(filePath).ToList();
+            }
+            else
+            {
+                return new List<string>(); // If no file exists, return an empty list
+            }
+        }
+
     }
 }
