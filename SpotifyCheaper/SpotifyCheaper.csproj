@@ -1,58 +1,113 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="MVVM\Resources\Images\default_album.png" />
-    <None Remove="MVVM\Resources\Images\delete.png" />
-    <None Remove="MVVM\Resources\Images\low_volume.png" />
-    <None Remove="MVVM\Resources\Images\max_volume.png" />
-    <None Remove="MVVM\Resources\Images\mute_volume.png" />
-    <None Remove="MVVM\Resources\Images\next.png" />
-    <None Remove="MVVM\Resources\Images\no_repeat.png" />
-    <None Remove="MVVM\Resources\Images\no_shuffle.png" />
-    <None Remove="MVVM\Resources\Images\pause.png" />
-    <None Remove="MVVM\Resources\Images\play.png" />
-    <None Remove="MVVM\Resources\Images\previous.png" />
-    <None Remove="MVVM\Resources\Images\repeat.png" />
-    <None Remove="MVVM\Resources\Images\repeat_one.png" />
-    <None Remove="MVVM\Resources\Images\shuffle.png" />
-    <None Remove="MVVM\Resources\Images\shuffle_white.png" />
-    <None Remove="MVVM\Resources\Images\spotify_logo.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="MVVM\Resources\Images\default_album.png" />
+		<None Remove="MVVM\Resources\Images\delete.png" />
+		<None Remove="MVVM\Resources\Images\low_volume.png" />
+		<None Remove="MVVM\Resources\Images\max_volume.png" />
+		<None Remove="MVVM\Resources\Images\mute_volume.png" />
+		<None Remove="MVVM\Resources\Images\next.png" />
+		<None Remove="MVVM\Resources\Images\no_repeat.png" />
+		<None Remove="MVVM\Resources\Images\no_shuffle.png" />
+		<None Remove="MVVM\Resources\Images\pause.png" />
+		<None Remove="MVVM\Resources\Images\play.png" />
+		<None Remove="MVVM\Resources\Images\previous.png" />
+		<None Remove="MVVM\Resources\Images\repeat.png" />
+		<None Remove="MVVM\Resources\Images\repeat_one.png" />
+		<None Remove="MVVM\Resources\Images\shuffle.png" />
+		<None Remove="MVVM\Resources\Images\shuffle_white.png" />
+		<None Remove="MVVM\Resources\Images\spotify_logo.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+			<WrapperTool>tlbimp</WrapperTool>
+			<VersionMinor>4</VersionMinor>
+			<VersionMajor>2</VersionMajor>
+			<Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+		</COMReference>
+		<COMReference Include="{d37e2a3e-8545-3a39-9f4f-31827c9124ab}">
+			<WrapperTool>tlbimp</WrapperTool>
+			<VersionMinor>4</VersionMinor>
+			<VersionMajor>2</VersionMajor>
+			<Guid>d37e2a3e-8545-3a39-9f4f-31827c9124ab</Guid>
+		</COMReference>
+	</ItemGroup>
 
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="TagLibSharp" Version="2.3.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="MVVM\Resources\Images\default_album.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\delete.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\low_volume.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\mute_volume.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\next.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\no_repeat.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\no_shuffle.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\pause.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\play.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\previous.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\repeat.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\repeat_one.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\shuffle.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MVVM\Resources\Images\max_volume.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="MVVM\Resources\Images\spotify_logo.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="TagLibSharp" Version="2.3.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="MVVM\Resources\Images\spotify_logo.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="MVVM\Resources\Themes\DarkTheme.xaml">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Page>
-    <Page Update="MVVM\Views\VideoPlayerView.xaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Update="MVVM\Resources\Themes\DarkTheme.xaml">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Page>
+	</ItemGroup>
 
 </Project>

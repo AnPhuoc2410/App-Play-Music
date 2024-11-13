@@ -75,7 +75,7 @@
         <Button x:Name="GoBackButton" Content="↩" Click="BtnGoBack_Click" Foreground="White" Background="Transparent" 
          Margin="2,-672,1123,616" BorderThickness="0" FontSize="30"/>
         <!-- Media Player Control Area -->
-        
+        <MediaElement Name="mediaElement" Margin="0,-624,0,-1" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
 
 
 
@@ -150,7 +150,6 @@
             </ListView.ItemTemplate>
 
         </ListView>
-
 
     </Grid>
 </Window>

@@ -59,7 +59,6 @@ namespace SpotifyCheaper.MVVM.Views
         }
 
 
-
         private void InitializePlayer()
         {
             _timer = new DispatcherTimer
@@ -275,10 +274,10 @@ namespace SpotifyCheaper.MVVM.Views
             if (VideoListView.SelectedItem is Video selectedVideo)
             {
                 _currentVideoIndex = _videoService.Videos.IndexOf(selectedVideo);
-                PlaySelectedVideo(selectedVideo);
+                PlaySelectedSong(selectedVideo);
             }
         }
-        private void PlaySelectedVideo(Video video)
+        private void PlaySelectedSong(Video video)
         {
             string filePath = video.FilePath;  // Use the dynamic file path from the Song object
 
