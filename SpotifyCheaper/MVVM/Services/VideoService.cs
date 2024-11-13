@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SpotifyCheaper.MVVM.Models;
+using SpotifyCheaper.MVVM.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +17,7 @@ namespace SpotifyCheaper.MVVM.Services
     public class VideoService
     {
         private FileService _fileService = new();
+        private FileRepository fileRepository = new();
 
         public ObservableCollection<Video> Videos { get; private set; } = new();
         private int _videoIndex = 1;
@@ -78,12 +80,12 @@ namespace SpotifyCheaper.MVVM.Services
                     }
                 }
 
-                SaveSongs();
+                SaveVideos();
             }
         }
-        private void SaveSongs()
+        private void SaveVideos()
         {
-            var jsonListVideos = JObject.Parse(SongListToString(Videos));
+            var jsonListVideos = JObject.Parse(VideoListToString(Videos));
             jsonListVideos["TotalVideo"] = _videoIndex - 1;
             bool success = _fileService.InputJson("videoList.json", jsonListVideos.ToString());
 
@@ -93,7 +95,7 @@ namespace SpotifyCheaper.MVVM.Services
             }
         }
 
-        public string SongListToString(ObservableCollection<Video> videoList)
+        public string VideoListToString(ObservableCollection<Video> videoList)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
             int count = 1;
@@ -104,6 +106,81 @@ namespace SpotifyCheaper.MVVM.Services
             }
             string sListVideo = JsonConvert.SerializeObject(dict, Formatting.Indented);
             return sListVideo;
+        }
+        public ObservableCollection<Video> GetMp4List(string filePath, int number, out List<int> ErrorSongIndex)
+        {
+            ErrorSongIndex = new();
+            FileService fileService = new FileService();
+
+            var listVideo = new ObservableCollection<Video>();
+            try
+            {
+                int iVideoNumber = 1;
+                for (int i = 1; i <= number; i++)
+                {
+                    string path = fileService.OutJsonValue(filePath, i.ToString());
+
+                    // Check if the song exist
+                    if (File.Exists(path))
+                    {
+
+                        var file = TagLib.File.Create(path);
+                        // Get the title and duration from the MP3 file
+                        string title = Path.GetFileName(path);
+                        TimeSpan duration = file.Properties.Duration;
+                        Video sVideo = new Video
+                        {
+                            VideoNumber = iVideoNumber++,
+                            Title = title,
+                            Duration = duration.ToString(@"mm\:ss"),
+                            FilePath = path
+                        };
+                        listVideo.Add(sVideo);
+                    }
+                    else
+                    {
+                        ErrorSongIndex.Add(i);
+                    }
+                }
+                return listVideo;
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the error as needed
+                Console.WriteLine("Error retrieving MP4 metadata: " + ex.Message);
+                return listVideo;
+            }
+        }
+        public bool DeleteAndChangeTotalSong(string file, ObservableCollection<Video> videoList)
+        {
+            string sVideoList = VideoListToString(videoList);
+            JObject jObjectList = JObject.Parse(sVideoList);
+            jObjectList["TotalVideo"] = videoList.Count;
+            return fileRepository.InputJsonFile(file, jObjectList.ToString());
+        }
+        public void LoadVideosFromJson()
+        {
+            string path = "videoList.json";
+            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), path);
+
+            if (File.Exists(fullPath))
+            {
+                var errorList = new List<int>();
+                string totalVideos = _fileService.OutJsonValue(path, "TotalVideo");
+
+                if (totalVideos != null)
+                {
+                    Videos = GetMp4List(path, int.Parse(totalVideos), out errorList);
+
+                    if (errorList.Count > 0)
+                    {
+                        DeleteAndChangeTotalSong(path, Videos);
+                        totalVideos = _fileService.OutJsonValue(path, "TotalVideo");
+                    }
+
+                    _videoIndex = int.Parse(totalVideos) + 1;
+                }
+            }
         }
     }
 }

@@ -74,7 +74,6 @@ namespace SpotifyCheaper
         {
             SongListView.Items.Clear();
             SongListView.ItemsSource = _songSerivce.Songs;
-
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
@@ -373,7 +372,7 @@ namespace SpotifyCheaper
             }
             catch (Exception)
             {
-                MessageBox.Show("Add song unsuccess", "Ok", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Add Video unsuccess", "Ok", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
