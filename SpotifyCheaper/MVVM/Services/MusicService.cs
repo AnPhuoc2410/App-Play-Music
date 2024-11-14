@@ -12,6 +12,8 @@ namespace SpotifyCheaper.MVVM.Services
     {
         private FileRepository fileRepository = new();
 
+
+
         // <summary>
         /// Gets the metadata (title and duration) of an MP3 file.
         /// </summary>
@@ -108,51 +110,15 @@ namespace SpotifyCheaper.MVVM.Services
             return s;
         }
 
-        public void DeleteAllErrorSong(string file, List<int> errorList)
-        {
-            fileRepository = new();
-            foreach (var error in errorList)
-            {
-                fileRepository.DeleteJsonValue(file, error.ToString());
-            }
-        }
-
-        //Ver 1
-        public void DeleteAndChangeTotalSong(string file, List<int> errorList, string key, string value)
-        {
-
-            foreach (var error in errorList)
-            {
-                // Lay file co index lon nhat             
-                string sTotalSong = fileRepository.GetJsonFile(file, "TotalSong");
-                string endListSong = fileRepository.GetJsonFile(file, sTotalSong);
-
-                // Toi index bi loi, thay bang gia tri index lon nhat xong delete gia tri lon nhat do
-                fileRepository.ChangeJsonKeyValue(file, error.ToString(), endListSong);
-                fileRepository.DeleteJsonValue(file, endListSong);
-                fileRepository.ChangeJsonKeyValue(file, key, value);
-
-            }
-            ///////////////////////////////////////
-
-
-
-        }
-
-        // Ver 2
-        // Tinh lam lai y chang ver 1 nma them mot it condition. Nma chot nghi ra ver 3 make sense hon.
-        public void DeleteAndChangeTotalSong(string file, List<int> errorList, ObservableCollection<Song> _songs)
-        {
-            string sTotalSong = _songs.Count.ToString();
-            string endListSong = fileRepository.GetJsonFile(file, sTotalSong); // Lay bai hat cuoi cung
-            for (int i = errorList.Count - 1; i >= 0; i++)
-            {
-                string error = errorList[i].ToString();
-
-            }
-        }
-
         // Ver 3
+        /// <summary>
+        /// Delete And Change Total Song 
+        /// Actually it will get the current play list, rewrite it with the old play list 
+        /// And change the total song with the song list.
+        /// </summary>
+        /// <param name="file"></param> File Delete
+        /// <param name="songList"></param>  
+        /// <returns></returns>
         public bool DeleteAndChangeTotalSong(string file, ObservableCollection<Song> songList)
         {
             string sSongList = SongListToString(songList);
@@ -161,12 +127,6 @@ namespace SpotifyCheaper.MVVM.Services
             return fileRepository.InputJsonFile(file, jObjectList.ToString());
         }
 
-        public bool AddSong(string file, string key, string value)
-        {
-            string sTotalSong = fileRepository.GetJsonFile(file, "TotalSong");
-            fileRepository.ChangeJsonKeyValue(file, "TotalSong", (int.Parse(sTotalSong) + 1).ToString());
-            return fileRepository.AddJsonValue(file, key, value);
-        }
 
         public string SongListToString(ObservableCollection<Song> songList)
         {

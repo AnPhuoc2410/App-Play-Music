@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
 
@@ -20,7 +21,6 @@ namespace SpotifyCheaper.MVVM.Repositories
                 string fullPath = currentPath + "\\" + file;
 
                 JObject jsonArray = JObject.Parse(value);
-
                 // Create the file and write the JSON content
                 File.WriteAllText(fullPath, jsonArray.ToString());
 
@@ -51,13 +51,13 @@ namespace SpotifyCheaper.MVVM.Repositories
         //}
 
 
-        public string GetJsonFile(string file, string value)
+        public string GetJsonFile(string file, string key)
         {
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(file)
                 .Build();
-            return configuration[value];
+            return configuration[key];
         }
 
         public bool DeleteJsonValue(string file, string value)

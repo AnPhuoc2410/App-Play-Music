@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
+using SpotifyCheaper.Models;
 using SpotifyCheaper.MVVM.Models;
 using SpotifyCheaper.MVVM.Services;
 using SpotifyCheaper.MVVM.Views;
@@ -19,7 +20,9 @@ namespace SpotifyCheaper
         private MediaPlayer _mediaPlayer = new();
         private SongsService _songSerivce;
         private MusicButtonService _musicButtonService;
+        private PlayListService _playlistService = new();
 
+        private ObservableCollection<Playlist> currentPlaylist = new ();
         private bool _isPlaying = false;
         private DispatcherTimer _timer;
         private int _currentSongIndex = -1;
@@ -27,6 +30,7 @@ namespace SpotifyCheaper
         private int _songIndex = 1;
         private int _lastSongIndex = -1;
         private bool _isDragging = false;
+        private int playlistId = 1; // De no auto mo playlist 1, sau nay chon playlist thi cap nhat gia tri nay.
 
         public MainWindow()
         {
@@ -38,7 +42,9 @@ namespace SpotifyCheaper
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _songSerivce.LoadSongsFromJson();
+            int totalPlaylist = int.Parse(_playlistService.GetCountPlaylist());
+            currentPlaylist = _playlistService.GetTotalPlaylist(totalPlaylist);
+            LoadPlayList();
             LoadSongs();
         }
         private void InitializePlayer()
@@ -53,8 +59,14 @@ namespace SpotifyCheaper
         private void LoadSongs()
         {
             SongListView.Items.Clear();
-            SongListView.ItemsSource = _songSerivce.Songs;
 
+            SongListView.ItemsSource = _songSerivce.Songs;
+        }
+
+        private void LoadPlayList()
+        {
+            _songSerivce.LoadSongsFromJson(currentPlaylist[playlistId - 1]);
+            currentPlaylist[playlistId - 1].Tracks = _songSerivce.Songs;
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
@@ -260,6 +272,7 @@ namespace SpotifyCheaper
             if (sender is Button button && button.DataContext is Song songToDelete)
             {
                 _songSerivce.DeleteSong(songToDelete);
+                _musicService.DeleteAndChangeTotalSong("songPath.json",_songSerivce.Songs);
                 MessageBox.Show("Song deleted.", "Delete", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
