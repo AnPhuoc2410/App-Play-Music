@@ -551,7 +551,17 @@ namespace SpotifyCheaper
 
         private void AblumButton_Click(object sender, RoutedEventArgs e)
         {
-
+            string s = "Test Again";
+            int id = currentPlaylist.Count + 1;
+            Playlist playlist = new Playlist()
+            {
+                Id = id,
+                Name = s
+            };
+            currentPlaylist.Add(playlist);
+            JObject jsonObject = JObject.Parse(JsonConvert.SerializeObject(currentPlaylist, Formatting.Indented));
+            jsonObject["TotalPlaylist"] = currentPlaylist.Count + 1;
+            fileService.InputJson("playlist" + playlistId.ToString() + ".json", jsonObject.ToString());
         }
     }
 }
