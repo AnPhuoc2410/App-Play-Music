@@ -50,9 +50,11 @@ namespace SpotifyCheaper
             InitializeComponent();
             _songSerivce = new SongsService(fileService, _musicService);
             _musicButtonService = new MusicButtonService(_mediaPlayer, _songSerivce.Songs);
+
             _waveform = new AudioWaveformGenerator();
             _waveform.OnSamplesCaptured += DrawWaveform;
             _waveform.StartCapturing();
+
             InitializePlayer();
             PlayListBox.ItemsSource = currentPlaylist;
         }
