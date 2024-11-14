@@ -29,14 +29,19 @@ namespace SpotifyCheaper.MVVM.Services
                 string title = Path.GetFileName(filePath);
                 TimeSpan duration = file.Properties.Duration;
                 string artist = file.Tag.FirstPerformer ?? "Unknown Artist";
-
+                byte[] albumArt = null;
+                if (file.Tag.Pictures.Length > 0)
+                {
+                    var picture = file.Tag.Pictures[0];
+                    albumArt = picture.Data.Data;
+                }
                 return new Song
                 {
                     TrackNumber = 1,
                     Title = title,
                     Duration = duration.ToString(@"mm\:ss"),
-                    Artist = artist
-                    // Khong biet sao Phuoc ko import filePath ma van chay dc?
+                    Artist = artist,
+                    AlbumArt = albumArt
                 };
             }
             catch (Exception ex)

@@ -3,16 +3,39 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:local="clr-namespace:SpotifyCheaper.MVVM.Views"
+        xmlns:local="clr-namespace:SpotifyCheaper.MVVM.Views"        
         mc:Ignorable="d" 
         WindowStartupLocation="CenterScreen"
-        Title="VideoPlayerView" Height="450" Width="800"
-        Background="#232b2b"
+        Title="VideoPlayerView" Height="800" Width="1200" ResizeMode="NoResize" Background="#232b2b"
+        MouseMove="Window_MouseMove" Loaded="Window_Loaded"
         >
-
     <!-- Define the resources here -->
     <Window.Resources>
         <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="IconToggleButtonStyle" TargetType="ToggleButton">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#ffffff"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -37,24 +60,29 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="10">
+
+    <Grid Grid.Row="1" VerticalAlignment="Bottom" Background="#232b2b" Opacity="0.8" Margin="0,0,0,10">
+
+
+
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="29*"/>
-            <RowDefinition Height="385*"/>
+            <RowDefinition Height="0*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <!-- Header Section -->
-        <Border Background="#1DB954" Height="50" VerticalAlignment="Top" Grid.RowSpan="2">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button x:Name="GoBackButton" Content="↩" Width="59" Height="51" Click="BtnGoBack_Click" Foreground="White" Background="#1DB954"/>
-                <TextBlock Text="My Video Player" FontSize="20" Foreground="White" />
-            </StackPanel>
-        </Border>
 
+        <Button x:Name="GoBackButton" Content="↩" Click="BtnGoBack_Click" Foreground="White" Background="Transparent" 
+         Margin="2,-672,1123,616" BorderThickness="0" FontSize="30"/>
         <!-- Media Player Control Area -->
-        <MediaElement Name="mediaElement" Margin="0,31,0,100" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
+        <MediaElement Name="mediaElement" Margin="0,-624,0,-1" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
+
+
+
+        <MediaElement Name="mediaElement" Margin="0,-624,0,-1" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
 
         <!-- Playback Controls -->
-        <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,277,0,0" HorizontalAlignment="Center" Grid.Row="1">
+        <StackPanel x:Name="ControlsPanel" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Height="88" Width="406">
             <!-- Progress Bar Simulation -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock x:Name="CurrentPositionTextBlock"  Text="00:00" VerticalAlignment="Center" Foreground="White" Margin="10,0"/>
@@ -62,14 +90,66 @@
                 <TextBlock x:Name="DurationTextBox"  Text="00:00" VerticalAlignment="Center" Foreground="White" Margin="10,0"/>
             </StackPanel>
 
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
                 <!-- Add icon buttons -->
-                <Button Name="ImportButton" Content="Import" Width="50" Margin="5" Click="BtnImport_Click"/>
+                <Button x:Name="ImportButton" Content="Import" Width="50" Margin="5" Click="BtnImport_Click"/>
                 <Button x:Name="PreviousButton" Content="⏮️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnPrevious_Click"/>
                 <Button x:Name="PlayButton" Content="⏯️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnPlayPause_Click"/>
                 <Button x:Name="NextButton" Content="⏭️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnNext_Click"/>
-                <Button x:Name="LoopButton" Content="🔁" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnRepeat_Click"/>
+                <ToggleButton x:Name="LoopButton" Content="🔁" Width="40" Height="40" Margin="5" Style="{StaticResource ControlToggleButtonStyle}" Click="BtnRepeat_Click"/>
+                <Button x:Name="FullScreenButton" Content="⛶" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnFullScreen_Click"/>
+
             </StackPanel>
         </StackPanel>
+        <ListView x:Name="VideoListView"   
+            Grid.Row="1"   
+            Background="#1e1e1e"   
+            Foreground="White"  
+            SelectionMode="Single"   
+            BorderThickness="0"   
+            ItemsSource="{Binding}"   
+            SelectionChanged="VideoListView_SelectionChanged" Margin="0,-611,0,88">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="#2e2e2e" CornerRadius="5" Padding="10" Margin="5">
+                        <Grid Width="935">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <!-- Track Number Column -->
+                                <ColumnDefinition Width="2*"/>
+                                <!-- Title Column -->
+                                <ColumnDefinition Width="200"/>
+                                <!-- Artist Column -->
+                                <ColumnDefinition Width="75"/>
+                                <!-- Duration Column -->
+                                <ColumnDefinition Width="100"/>
+                                <!-- Delete Button Column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Track Number -->
+                            <TextBlock Text="{Binding VideoNumber}" FontSize="16" Foreground="White" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                            <!-- Title with text trimming -->
+                            <TextBlock Text="{Binding Title}" FontSize="16" Foreground="White" 
+                           Grid.Column="1" Margin="10,0,0,0" TextTrimming="CharacterEllipsis" MaxWidth="300" />
+
+                            <!-- Artist -->
+                            <TextBlock Text="{Binding Duration}" FontSize="14" Foreground="LightGray" 
+                           Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" />
+
+                            <!-- Delete Button -->
+                            <Button Content="Delete" Grid.Column="4" Width="75" Height="30" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center" 
+                        Background="Red" Foreground="White"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+
     </Grid>
 </Window>

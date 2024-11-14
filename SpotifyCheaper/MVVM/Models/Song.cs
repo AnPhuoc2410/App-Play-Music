@@ -7,7 +7,7 @@
         public string Artist { get; set; }
         public string Duration { get; set; }
         public string FilePath { get; set; }
-
+         public byte[] AlbumArt { get; set; }
         public string ToString()
         {
             return Title + "|" + FilePath;
