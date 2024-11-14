@@ -175,7 +175,7 @@
 
                     <!-- Play/Pause Button -->
                     <Button x:Name="PlayButton" Style="{StaticResource ControlButtonStyle}" Margin="10,0" Click="PlayPause_Click">
-                        <Image Source="E:\FPT\FA24_Term5\PRN212\SpotifyCheaper\SpotifyCheaper\MVVM\Resources\Images\play.png" Width="24" Height="24"/>
+                        <Image Source="../Resources/Images/play.png" Width="24" Height="24"/>
                     </Button>
 
                     <!-- Next Button -->
