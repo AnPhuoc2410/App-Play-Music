@@ -315,5 +315,10 @@ namespace SpotifyCheaper.MVVM.Views
             _videoService.LoadVideosFromJson();
             LoadVideos();
         }
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Application.Current.Shutdown();
+        }
     }
 }
