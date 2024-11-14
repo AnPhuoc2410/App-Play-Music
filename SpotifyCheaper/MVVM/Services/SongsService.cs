@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
+using SpotifyCheaper.Models;
 using SpotifyCheaper.MVVM.Models;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,12 @@ namespace SpotifyCheaper.MVVM.Services
         {
             _fileService = fileService;
             _musicService = musicService;
-            LoadSongsFromJson();
         }
 
-        public void LoadSongsFromJson()
+        public void LoadSongsFromJson(Playlist inPlayList)
         {
-            string path = "songPath.json";
+            Songs = new();
+            string path = "playlist"+inPlayList.Id+".json";
             string fullPath = Path.Combine(Directory.GetCurrentDirectory(), path);
 
             if (File.Exists(fullPath))
@@ -48,6 +49,11 @@ namespace SpotifyCheaper.MVVM.Services
 
                     _songIndex = int.Parse(totalSongs) + 1;
                 }
+            }
+            else
+            {
+                JObject jsonObject = new();
+                File.WriteAllText(fullPath, jsonObject.ToString());
             }
         }
 
