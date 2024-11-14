@@ -73,6 +73,7 @@ namespace SpotifyCheaper.MVVM.Views
         {
             MainWindow main = new MainWindow();
             main.Show();
+            this.Hide();
         }
 
         private void BtnPrevious_Click(object sender, RoutedEventArgs e)
