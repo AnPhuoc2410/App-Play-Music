@@ -39,6 +39,9 @@
                 <ListBox x:Name="PlayListBox" ItemsSource="{Binding currentPlaylist}" DisplayMemberPath="Name" Background="#333" 
                 Foreground="White" Visibility="Collapsed" Margin="10,20,0,0" SelectionChanged="PlayListBox_SelectionChanged" MouseRightButtonUp="Right_Click"/>
                 <Button x:Name="ImportButton" Content="Add Songs" Style="{StaticResource NavButtonStyle}" Click="ImportButton_Click" />
+                <!-- Input Playlist TextBox -->
+                <TextBox x:Name="PlaylistTextBox" Width="180" Height="30" Margin="10,10,10,0" Background="Gray" Foreground="White" 
+                  />
             </StackPanel>
 
         </StackPanel>
