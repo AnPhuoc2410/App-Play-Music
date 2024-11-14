@@ -551,7 +551,25 @@ namespace SpotifyCheaper
 
         private void AblumButton_Click(object sender, RoutedEventArgs e)
         {
+            string playlistName = PlaylistTextBox.Text.Trim();
+            if (string.IsNullOrEmpty(playlistName))
+            {
+                MessageBox.Show("Please enter a playlist name", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            int newPlaylistId = currentPlaylist.Count + 1;
+            bool isCreated = _playlistService.CreatePlayList($"playlist{newPlaylistId}.json", newPlaylistId, playlistName);
+
+            if (isCreated)
+            {
+                currentPlaylist.Add(new Playlist { Id = newPlaylistId, Name = playlistName, Tracks = new ObservableCollection<Song>() });
+                MessageBox.Show("Playlist created successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Failed to create playlist", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
