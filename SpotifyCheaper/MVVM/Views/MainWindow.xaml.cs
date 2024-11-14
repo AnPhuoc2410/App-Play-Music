@@ -476,7 +476,7 @@ namespace SpotifyCheaper
                 };
 
                 // Update total song list in JSON file
-                _musicService.DeleteAndChangeTotalSong("songPath.json", _songSerivce.Songs);
+                _musicService.DeleteAndChangeTotalSong("playlist"+playlistId.ToString()+".json", _songSerivce.Songs);
 
                 // Show confirmation message
                 MessageBox.Show("Song deleted.", "Delete", MessageBoxButton.OK, MessageBoxImage.Information);
