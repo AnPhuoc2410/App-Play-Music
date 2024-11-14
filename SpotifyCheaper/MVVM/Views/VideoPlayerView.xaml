@@ -79,7 +79,6 @@
 
 
 
-        <MediaElement Name="mediaElement" Margin="0,-624,0,-1" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
 
         <!-- Playback Controls -->
         <StackPanel x:Name="ControlsPanel" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Height="88" Width="406">
