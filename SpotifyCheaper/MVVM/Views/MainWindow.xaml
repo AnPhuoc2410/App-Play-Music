@@ -33,7 +33,7 @@
                 <Button x:Name="VideoButton" Content="Video" Style="{StaticResource NavButtonStyle}" Click="VideoButton_Click"/>
                 <TextBlock Text="YOUR MUSIC" FontSize="14" FontWeight="Bold" Foreground="Gray" Margin="10,20,0,5"/>
                 <Button Content="Songs" Style="{StaticResource NavButtonStyle}" />
-                <Button Content="Albums" Style="{StaticResource NavButtonStyle}" />
+                <Button x:Name="AblumButton" Content="Albums" Style="{StaticResource NavButtonStyle}" Click="AblumButton_Click" />
                 <Button Content="PLaylist" Style="{StaticResource NavButtonStyle}" Click="ArtistsButton_Click" />
                 <!-- Artist ListBox (Initially Collapsed) -->
                 <ListBox x:Name="PlayListBox" ItemsSource="{Binding currentPlaylist}" DisplayMemberPath="Name" Background="#333" 

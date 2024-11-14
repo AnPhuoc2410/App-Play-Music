@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SpotifyCheaper.Models;
 using SpotifyCheaper.MVVM.Models;
@@ -543,6 +544,12 @@ namespace SpotifyCheaper
         }
 
         private void Right_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //JObject jsonObject = JsonConvert(currentPlaylist, Formatting.Indented);
+            fileService.InputJson("playlist" + playlistId.ToString() + ".json", currentPlaylist.ToString());
+        }
+
+        private void AblumButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
