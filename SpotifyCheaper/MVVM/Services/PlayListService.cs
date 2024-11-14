@@ -15,7 +15,7 @@ namespace SpotifyCheaper.MVVM.Services
 {
     public class PlayListService
     {
-        private readonly string playlistFile = Directory.GetCurrentDirectory()+ "\\" + "playList.json";
+        public readonly string playlistFile = Directory.GetCurrentDirectory()+ "\\" + "playList.json";
 
         private FileRepository  _fileRepository = new();   
         private MusicService _musicService = new MusicService();
