@@ -549,19 +549,23 @@ namespace SpotifyCheaper
             fileService.InputJson("playlist" + playlistId.ToString() + ".json", currentPlaylist.ToString());
         }
 
-        private void AblumButton_Click(object sender, RoutedEventArgs e)
+        private void AlbumButton_Click(object sender, RoutedEventArgs e)
         {
-            string s = "Test Again";
-            int id = currentPlaylist.Count + 1;
-            Playlist playlist = new Playlist()
+            string playlistName = PlaylistTextBox.Text;
+            if (string.IsNullOrWhiteSpace(playlistName))
             {
-                Id = id,
-                Name = s
-            };
-            currentPlaylist.Add(playlist);
-            JObject jsonObject = JObject.Parse(JsonConvert.SerializeObject(currentPlaylist, Formatting.Indented));
+                MessageBox.Show("Please input a valid name", "Invalid", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            int newId = currentPlaylist.Count + 1;
+                      
+            JObject jsonObject = JObject.Parse(File.ReadAllText(_playlistService.playlistFile));
+            jsonObject[(currentPlaylist.Count + 1).ToString()] = playlistName;
             jsonObject["TotalPlaylist"] = currentPlaylist.Count + 1;
-            fileService.InputJson("playlist" + playlistId.ToString() + ".json", jsonObject.ToString());
+            fileService.InputJson("playlist"+ ".json", jsonObject.ToString());
+            MessageBox.Show("Add playlist success", "Success", MessageBoxButton.OK, MessageBoxImage.None);
         }
+
     }
 }
