@@ -84,6 +84,7 @@ namespace SpotifyCheaper
 
         private void LoadPlayList()
         {
+            
             _songSerivce.LoadSongsFromJson(currentPlaylist[playlistId - 1]);
             currentPlaylist[playlistId - 1].Tracks = _songSerivce.Songs;
         }
@@ -132,6 +133,7 @@ namespace SpotifyCheaper
         private void Play_Click(object sender, RoutedEventArgs e)
         {
             PlayRandomSong();
+            SongListView.SelectedIndex = _currentSongIndex;
         }
 
         private void Previous_Click(object sender, RoutedEventArgs e)
@@ -400,7 +402,19 @@ namespace SpotifyCheaper
             videoPlayerView.ShowDialog();
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private void AddSongToPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Ôk");
+            //LoadSongs();
+        }
+
+        private void ThreeDotButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Ôk");
+            //LoadSongs();
+        }
+
+        private void DeleteSong_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.DataContext is Song songToDelete)
             {

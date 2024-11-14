@@ -33,10 +33,10 @@
                 <Button Content="Songs" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="Albums" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="PLaylist" Style="{StaticResource NavButtonStyle}" Click="ArtistsButton_Click" />
-                <!-- Artist ListBox (Initially Collapsed) -->
+                
                 <ListBox x:Name="PlayListBox" ItemsSource="{Binding Playlist}" Background="#333" 
                 Foreground="White" Visibility="Collapsed" Margin="10,20,0,0" SelectionChanged="PlayListBox_SelectionChanged"/>
-                <Button x:Name="ImportButton" Content="Local Files" Style="{StaticResource NavButtonStyle}" Click="ImportButton_Click" />
+                <Button x:Name="ImportButton" Content="Add Songs" Style="{StaticResource NavButtonStyle}" Click="ImportButton_Click" />
             </StackPanel>
 
             
@@ -81,13 +81,13 @@
                         <Border Background="#2e2e2e" CornerRadius="5" Padding="10" Margin="5">
                             <Grid Width="935">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
                                     <!-- Track Number Column -->
                                     <ColumnDefinition Width="2*"/>
                                     <!-- Title Column -->
-                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="2*"/>
                                     <!-- Artist Column -->
-                                    <ColumnDefinition Width="75"/>
+                                    <ColumnDefinition Width="*"/>
                                     <!-- Duration Column -->
                                     <ColumnDefinition Width="100"/>
                                     <!-- Delete Button Column -->
@@ -110,11 +110,17 @@
                            Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" />
 
                                 <!-- Delete Button -->
-                                <Button Grid.Column="4" Style="{StaticResource ControlButtonStyle}" 
-                                Click="DeleteButton_Click">
+                                <!-- Delete Button (replaced with 3-dot menu) -->
+                                <Button Grid.Column="4" Style="{StaticResource ControlButtonStyle}" Click="ThreeDotButton_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="../Resources/Images/delete.png" Width="24" Height="30"/>
+                                        <Image Source="../Resources/Images/ellipsis.png" Width="24" Height="24"/>
                                     </StackPanel>
+                                    <Button.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Add to Playlist" Click="AddSongToPlaylist_Click"/>
+                                            <MenuItem Header="Delete Song" Click="DeleteSong_Click"/>
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
                                 </Button>
                             </Grid>
                         </Border>
