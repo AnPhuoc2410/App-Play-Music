@@ -108,7 +108,7 @@ namespace SpotifyCheaper.MVVM.Services
                     Playlist playlist = new Playlist()
                     {
                         Id = i,
-                        Name = playlistName,
+                        Name = playlistName
                     };
                     list.Add(playlist);
                 }
