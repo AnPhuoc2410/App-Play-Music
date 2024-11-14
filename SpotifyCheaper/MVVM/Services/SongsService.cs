@@ -117,7 +117,7 @@ namespace SpotifyCheaper.MVVM.Services
             }
             foreach (var song in Songs)
             {
-                if (song.Title.ToLower().Contains(inSearching.ToLower()))
+                if (song.Title.ToLower().Contains(inSearching.ToLower()) || song.Artist.ToLower().Contains(inSearching.ToLower()))
                 {
                     outListSong.Add(song);
                 }
@@ -125,5 +125,6 @@ namespace SpotifyCheaper.MVVM.Services
 
             return outListSong;
         }
+        
     }
 }

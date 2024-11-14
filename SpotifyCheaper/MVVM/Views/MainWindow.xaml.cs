@@ -24,6 +24,7 @@ namespace SpotifyCheaper
         private SongsService _songSerivce;
         private MusicButtonService _musicButtonService;
         private PlayListService _playlistService = new();
+        private SpotifyServices _spotifyServices = new();
 
         public ObservableCollection<Playlist> currentPlaylist = new ();
 
@@ -124,12 +125,12 @@ namespace SpotifyCheaper
         }
 
 
-        private void SongListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void SongListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SongListView.SelectedItem is Song selectedSong)
             {
                 _currentSongIndex = _songSerivce.Songs.IndexOf(selectedSong);
-                PlaySelectedSong(selectedSong);
+                await PlaySelectedSong(selectedSong);
             }
         }
 
@@ -138,21 +139,21 @@ namespace SpotifyCheaper
             PlayRandomSong();
         }
 
-        private void Previous_Click(object sender, RoutedEventArgs e)
+        private async void Previous_Click(object sender, RoutedEventArgs e)
         {
             if (_currentSongIndex > 0)
             {
                 _currentSongIndex--;
                 SongListView.SelectedIndex = _currentSongIndex;
-                PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
+                await PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
             }
         }
 
-        private void Next_Click(object sender, RoutedEventArgs e)
+        private async void Next_Click(object sender, RoutedEventArgs e)
         {
             if (_isLooping)
             {
-                PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
+                await PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
             }
             else if (_isShuffling && _songSerivce.Songs.Count > 1)
             {
@@ -170,7 +171,7 @@ namespace SpotifyCheaper
                 if (_currentSongIndex >= 0)
                 {
                     SongListView.SelectedIndex = _currentSongIndex;
-                    PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
+                    await PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
                 }
                 else
                 {
@@ -188,7 +189,7 @@ namespace SpotifyCheaper
                     : @"..\Resources\Images\no_shuffle.png", UriKind.Relative));
             ShuffleButton.ToolTip = new ToolTip { Content = $"Shuffle: {(_isShuffling ? "On" : "Off")}" };
         }
-        private void PlayRandomSong()
+        private async void PlayRandomSong()
         {
             Random random = new Random();
             int randomIndex;
@@ -200,7 +201,7 @@ namespace SpotifyCheaper
 
             _currentSongIndex = randomIndex;
             _lastSongIndex = _currentSongIndex;
-            PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
+            await PlaySelectedSong(_songSerivce.Songs[_currentSongIndex]);
         }
 
         private void LoopButton_Click(object sender, RoutedEventArgs e)
@@ -231,7 +232,7 @@ namespace SpotifyCheaper
             }
         }
 
-        private void PlaySelectedSong(Song song)
+        private async Task PlaySelectedSong(Song song)
         {
             string filePath = song.FilePath;
 
@@ -277,8 +278,32 @@ namespace SpotifyCheaper
                 else
                 {
                     // Set a default image if no album art is available
-                    SongImage.Source = new BitmapImage(new Uri(@"..\Resources\Images\default_album.png", UriKind.Relative));
+                    string imageUrl = await _spotifyServices.GetImageAsync(song.Title);
+                    Uri imageUri;
+
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        // Check if the imageUrl is absolute
+                        if (Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
+                        {
+                            imageUri = new Uri(imageUrl, UriKind.Absolute);
+                        }
+                        else
+                        {
+                            // Handle the case where the URL is relative
+                            imageUri = new Uri(imageUrl, UriKind.Relative);
+                        }
+                    }
+                    else
+                    {
+                        // Set a default image if no album art is available
+                        imageUri = new Uri(@"..\Resources\Images\default_album.png", UriKind.Relative);
+                    }
+
+                    SongImage.Source = new BitmapImage(imageUri);
                 }
+                
+
             }
             else
             {
