@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
+using SpotifyCheaper.Models;
 using SpotifyCheaper.MVVM.Models;
 using System;
 using System.Collections.Generic;
@@ -16,19 +17,20 @@ namespace SpotifyCheaper.MVVM.Services
         private readonly FileService _fileService;
         private readonly MusicService _musicService;
 
-        public ObservableCollection<Song> Songs { get; private set; } = new();
+        public ObservableCollection<Song> Songs { get; set; } = new();
         private int _songIndex = 1;
 
         public SongsService(FileService fileService, MusicService musicService)
         {
             _fileService = fileService;
             _musicService = musicService;
-            LoadSongsFromJson();
         }
 
-        public void LoadSongsFromJson()
+        public void LoadSongsFromJson(Playlist inPlayList)
         {
-            string path = "songPath.json";
+            Songs = new();
+            _songIndex = 1;
+            string path = "playlist"+inPlayList.Id+".json";
             string fullPath = Path.Combine(Directory.GetCurrentDirectory(), path);
 
             if (File.Exists(fullPath))
@@ -49,9 +51,14 @@ namespace SpotifyCheaper.MVVM.Services
                     _songIndex = int.Parse(totalSongs) + 1;
                 }
             }
+            else
+            {
+                JObject jsonObject = new();
+                File.WriteAllText(fullPath, jsonObject.ToString());
+            }
         }
 
-        public void ImportSongs()
+        public void ImportSongs(int inPlaylist)
         {
             OpenFileDialog openFileDialog = new()
             {
@@ -77,16 +84,16 @@ namespace SpotifyCheaper.MVVM.Services
                         _songIndex++;
                     }
                 }
-
-                SaveSongs();
+                SaveSongs( inPlaylist);
             }
         }
 
-        private void SaveSongs()
+        private void SaveSongs(int inPlaylist)
         {
+            string file = "playlist" + inPlaylist.ToString() + ".json";
             var jsonListSong = JObject.Parse(_musicService.SongListToString(Songs));
             jsonListSong["TotalSong"] = _songIndex - 1;
-            bool success = _fileService.InputJson("songPath.json", jsonListSong.ToString());
+            bool success = _fileService.InputJson(file, jsonListSong.ToString());
 
             if (!success)
             {
@@ -110,7 +117,7 @@ namespace SpotifyCheaper.MVVM.Services
             }
             foreach (var song in Songs)
             {
-                if (song.Title.ToLower().Contains(inSearching.ToLower()))
+                if (song.Title.ToLower().Contains(inSearching.ToLower()) || song.Artist.ToLower().Contains(inSearching.ToLower()))
                 {
                     outListSong.Add(song);
                 }
@@ -118,5 +125,6 @@ namespace SpotifyCheaper.MVVM.Services
 
             return outListSong;
         }
+        
     }
 }
