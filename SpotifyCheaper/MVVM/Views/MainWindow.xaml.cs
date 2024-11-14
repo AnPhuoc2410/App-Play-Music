@@ -499,7 +499,7 @@ namespace SpotifyCheaper
                 Polyline waveformPolyline = new Polyline
                 {
                     Stroke = Brushes.Black,       // Change wave color
-                    StrokeThickness = 2           // Change wave thickness
+                    StrokeThickness = 1.5           // Change wave thickness
                 };
 
                 double xIncrement = canvasWidth / samples.Count;
