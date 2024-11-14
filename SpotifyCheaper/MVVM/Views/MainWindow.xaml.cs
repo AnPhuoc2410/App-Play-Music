@@ -559,7 +559,12 @@ namespace SpotifyCheaper
             }
 
             int newId = currentPlaylist.Count + 1;
-                      
+            Playlist newPlaylist = new Playlist
+            {
+                Id = newId,
+                Name = playlistName
+            };                    
+            currentPlaylist.Add(newPlaylist);
             JObject jsonObject = JObject.Parse(File.ReadAllText(_playlistService.playlistFile));
             jsonObject[(currentPlaylist.Count + 1).ToString()] = playlistName;
             jsonObject["TotalPlaylist"] = currentPlaylist.Count + 1;
