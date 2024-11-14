@@ -67,8 +67,6 @@ namespace SpotifyCheaper
         }
 
 
-
-
         private void InitializePlayer()
         {
             _timer = new DispatcherTimer
@@ -80,14 +78,18 @@ namespace SpotifyCheaper
 
         private void LoadSongs()
         {
-            SongListView.Items.Clear();
+            //SongListView.Items.Clear();
             SongListView.ItemsSource = _songSerivce.Songs;
         }
 
         private void LoadPlayList()
         {
-            _songSerivce.LoadSongsFromJson(currentPlaylist[playlistId - 1]);
-            currentPlaylist[playlistId - 1].Tracks = _songSerivce.Songs;
+            if (currentPlaylist[playlistId - 1].Tracks.Count ==0 )
+            {
+                _songSerivce.LoadSongsFromJson(currentPlaylist[playlistId - 1]);
+                currentPlaylist[playlistId - 1].Tracks = _songSerivce.Songs;
+            }
+            else _songSerivce.Songs = currentPlaylist[playlistId - 1].Tracks;
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
@@ -382,7 +384,7 @@ namespace SpotifyCheaper
         {
             try
             {
-                _songSerivce.ImportSongs();
+                _songSerivce.ImportSongs(playlistId);
             }
             catch (Exception)
             {
@@ -445,9 +447,16 @@ namespace SpotifyCheaper
             if (PlayListBox.SelectedItem != null)
             {
 
-                string selectedArtist = PlayListBox.SelectedItem.ToString();
-
+                int selectedArtist = PlayListBox.SelectedIndex+ 1;
+                playlistId = selectedArtist;
             }
+            LoadPlayList();
+            LoadSongs();
+        }
+
+        private void Right_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
         }
     }
 }
