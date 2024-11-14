@@ -25,7 +25,8 @@ namespace SpotifyCheaper
         private MusicButtonService _musicButtonService;
         private PlayListService _playlistService = new();
 
-        private ObservableCollection<Playlist> currentPlaylist = new ();
+        public ObservableCollection<Playlist> currentPlaylist = new ();
+
         private bool _isPlaying = false;
         private DispatcherTimer _timer;
         private int _currentSongIndex = -1;
@@ -46,6 +47,7 @@ namespace SpotifyCheaper
             _songSerivce = new SongsService(fileService, _musicService);
             _musicButtonService = new MusicButtonService(_mediaPlayer, _songSerivce.Songs);
             InitializePlayer();
+            PlayListBox.ItemsSource = currentPlaylist;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -61,7 +63,7 @@ namespace SpotifyCheaper
             PlayListBox.Visibility = PlayListBox.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
 
             // Optionally, bind data here if not already bound in your ViewModel setup
-            DataContext = new MainViewModel();
+            PlayListBox.ItemsSource = currentPlaylist;
         }
 
 

@@ -34,7 +34,7 @@
                 <Button Content="Albums" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="PLaylist" Style="{StaticResource NavButtonStyle}" Click="ArtistsButton_Click" />
                 <!-- Artist ListBox (Initially Collapsed) -->
-                <ListBox x:Name="PlayListBox" ItemsSource="{Binding Playlist}" Background="#333" 
+                <ListBox x:Name="PlayListBox" ItemsSource="{Binding Playlist.Name}" DisplayMemberPath="Name" Background="#333" 
                 Foreground="White" Visibility="Collapsed" Margin="10,20,0,0" SelectionChanged="PlayListBox_SelectionChanged"/>
                 <Button x:Name="ImportButton" Content="Local Files" Style="{StaticResource NavButtonStyle}" Click="ImportButton_Click" />
             </StackPanel>
@@ -59,7 +59,7 @@
                 <Image Source="https://images.hdqwalls.com/wallpapers/spotify-logo-1y.jpg" Opacity="0.3" Stretch="UniformToFill"/>
                 <StackPanel VerticalAlignment="Bottom" Margin="20">
                     <TextBlock Text="2.5 MONTHLY LISTENERS" Foreground="White" FontSize="14"/>
-                    <TextBlock x:Name="TestKhoi" Text="She not mine" Foreground="White" FontSize="32" FontWeight="Bold"/>
+                    <TextBlock x:Name="TestKhoi" Text="How to ask Crush in4" Foreground="White" FontSize="32" FontWeight="Bold"/>
                     <StackPanel x:Name="Play_Song" Orientation="Horizontal" Margin="0,5,0,0">
                         <Button x:Name="Play" Content="Play Song" Style="{StaticResource HeaderButtonStyle}" Margin="0,0,10,0" Click="Play_Click"/>
                         <Button Content="Play Album" Style="{StaticResource HeaderButtonStyle}"/>
