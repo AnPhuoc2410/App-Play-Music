@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace SpotifyCheaper
@@ -24,20 +25,21 @@ namespace SpotifyCheaper
         private SongsService _songSerivce;
         private MusicButtonService _musicButtonService;
         private PlayListService _playlistService = new();
+        private AudioWaveformGenerator _waveform;
 
         private ObservableCollection<Playlist> currentPlaylist = new ();
         private bool _isPlaying = false;
         private DispatcherTimer _timer;
-        private int _currentSongIndex = -1;
 
         private bool _isShuffling = false;//Shuffle list
         private bool _isRepeating = false;//Repaet All list
         private bool _isLooping = false;// Repeat One (Loop current song)
+        private bool _isDragging = false;
 
 
         private int _songIndex = 1;
+        private int _currentSongIndex = -1;
         private int _lastSongIndex = -1;
-        private bool _isDragging = false;
         private int playlistId = 1; // De no auto mo playlist 1, sau nay chon playlist thi cap nhat gia tri nay.
 
         public MainWindow()
@@ -45,6 +47,9 @@ namespace SpotifyCheaper
             InitializeComponent();
             _songSerivce = new SongsService(fileService, _musicService);
             _musicButtonService = new MusicButtonService(_mediaPlayer, _songSerivce.Songs);
+            _waveform = new AudioWaveformGenerator();
+            _waveform.OnSamplesCaptured += DrawWaveform;
+            _waveform.StartCapturing();
             InitializePlayer();
         }
 
@@ -450,6 +455,46 @@ namespace SpotifyCheaper
             }
         }
 
+        private void DrawWaveform(List<float> samples)
+        {
+            // Use Dispatcher to ensure we are on the UI thread
+            WaveformCanvas.Dispatcher.Invoke(() =>
+            {
+                // Clear previous waveform
+                WaveformCanvas.Children.Clear();
+
+                double canvasHeight = WaveformCanvas.ActualHeight;
+                double canvasWidth = WaveformCanvas.ActualWidth;
+                double midPoint = canvasHeight / 2;
+
+                // Create waveform path
+                Polyline waveformPolyline = new Polyline
+                {
+                    Stroke = Brushes.Black,       // Change wave color
+                    StrokeThickness = 2           // Change wave thickness
+                };
+
+                double xIncrement = canvasWidth / samples.Count;
+                double x = 0;
+
+                foreach (float sample in samples)
+                {
+                    double y = midPoint - (sample * midPoint); // scale to canvas
+                    waveformPolyline.Points.Add(new Point(x, y));
+                    x += xIncrement;
+                }
+
+                WaveformCanvas.Children.Add(waveformPolyline);
+            });
+        }
+
+        // Optional cleanup when the window closes
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Application.Current.Shutdown();
+            //_waveform.StopCapturing();
+        }
 
 
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
