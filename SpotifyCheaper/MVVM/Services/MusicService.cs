@@ -38,7 +38,7 @@ namespace SpotifyCheaper.MVVM.Services
                 return new Song
                 {
                     TrackNumber = 1,
-                    Title = title,
+                    Title = title.Substring(0, title.Length - 4),
                     Duration = duration.ToString(@"mm\:ss"),
                     Artist = artist,
                     AlbumArt = albumArt
@@ -77,7 +77,7 @@ namespace SpotifyCheaper.MVVM.Services
                         Song sSong = new Song
                         {
                             TrackNumber = iTrackNumber++,
-                            Title = title,
+                            Title = title.Substring(0, title.Length-4),
                             Duration = duration.ToString(@"mm\:ss"),
                             Artist = artist,
                             FilePath = path
