@@ -463,11 +463,7 @@ namespace SpotifyCheaper
                     DurationSlider.Value = 0.0;
                     CurrentPositionTextBlock.Text = "00:00";
                 }
-
-                // Delete the song from the service
                 _songSerivce.DeleteSong(songToDelete);
-
-                // Update Play button to show "Play" icon
                 PlayButton.Content = new Image
                 {
                     Source = new BitmapImage(new Uri(@"..\Resources\Images\play.png", UriKind.Relative)),
@@ -475,10 +471,7 @@ namespace SpotifyCheaper
                     Height = 24
                 };
 
-                // Update total song list in JSON file
                 _musicService.DeleteAndChangeTotalSong("songPath.json", _songSerivce.Songs);
-
-                // Show confirmation message
                 MessageBox.Show("Song deleted.", "Delete", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -498,8 +491,8 @@ namespace SpotifyCheaper
                 // Create waveform path
                 Polyline waveformPolyline = new Polyline
                 {
-                    Stroke = Brushes.Black,       // Change wave color
-                    StrokeThickness = 1.5           // Change wave thickness
+                    Stroke = Brushes.Black,
+                    StrokeThickness = 1.5           
                 };
 
                 double xIncrement = canvasWidth / samples.Count;

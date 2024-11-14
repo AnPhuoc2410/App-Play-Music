@@ -72,8 +72,10 @@
         </Grid.RowDefinitions>
         <!-- Header Section -->
 
-        <Button x:Name="GoBackButton" Content="↩" Click="BtnGoBack_Click" Foreground="White" Background="Transparent" 
-         Margin="2,-672,1123,616" BorderThickness="0" FontSize="30"/>
+        <Button x:Name="GoBackButton" Click="BtnGoBack_Click" Foreground="White" Background="Transparent" 
+         Margin="2,-672,1123,616" BorderThickness="0" FontSize="30">
+            <Image Source="../Resources/Images/back.png" Width="24" Height="24"/>
+        </Button>
         <!-- Media Player Control Area -->
         <MediaElement Name="mediaElement" Margin="0,-624,0,-1" LoadedBehavior="Manual" UnloadedBehavior="Stop" Grid.Row="1"/>
 
@@ -91,11 +93,21 @@
 
                 <!-- Add icon buttons -->
                 <Button x:Name="ImportButton" Content="Import" Width="50" Margin="5" Click="BtnImport_Click"/>
-                <Button x:Name="PreviousButton" Content="⏮️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnPrevious_Click"/>
-                <Button x:Name="PlayButton" Content="⏯️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnPlayPause_Click"/>
-                <Button x:Name="NextButton" Content="⏭️" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnNext_Click"/>
-                <ToggleButton x:Name="LoopButton" Content="🔁" Width="40" Height="40" Margin="5" Style="{StaticResource ControlToggleButtonStyle}" Click="BtnRepeat_Click"/>
-                <Button x:Name="FullScreenButton" Content="⛶" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnFullScreen_Click"/>
+                <Button x:Name="PreviousButton" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnPrevious_Click">
+                    <Image Source="../Resources/Images/previous.png" Width="24" Height="24"/>
+                </Button>
+                <Button x:Name="PlayButton" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnPlayPause_Click">
+                    <Image Source="../Resources/Images/play.png" Width="24" Height="24"/>
+                </Button>
+                <Button x:Name="NextButton" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnNext_Click">
+                    <Image Source="../Resources/Images/next.png" Width="24" Height="24"/>
+                </Button>
+                <ToggleButton x:Name="LoopButton" Width="40" Height="40" Margin="5" Style="{StaticResource ControlToggleButtonStyle}" Click="BtnRepeat_Click">
+                    <Image Source="../Resources/Images/repeat.png" Width="24" Height="24"/>
+                </ToggleButton>
+                <Button x:Name="FullScreenButton" Width="40" Height="40" Margin="5" Style="{StaticResource IconButtonStyle}" Click="BtnFullScreen_Click">
+                    <Image Source="../Resources/Images/fullscreen.png" Width="24" Height="24"/>
+                </Button>
 
             </StackPanel>
         </StackPanel>

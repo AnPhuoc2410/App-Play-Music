@@ -2,15 +2,14 @@
 using NAudio.CoreAudioApi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpotifyCheaper.MVVM.Services
 {
     public class AudioWaveformGenerator
     {
         private WasapiLoopbackCapture _loopbackCapture;
+        private List<float> _sampleBuffer;
+        private const int BufferSize = 1024; // Number of samples to process at once
 
         public event Action<List<float>> OnSamplesCaptured;
 
@@ -18,17 +17,25 @@ namespace SpotifyCheaper.MVVM.Services
         {
             _loopbackCapture = new WasapiLoopbackCapture();
             _loopbackCapture.DataAvailable += LoopbackCapture_DataAvailable;
+            _sampleBuffer = new List<float>();
         }
 
         private void LoopbackCapture_DataAvailable(object sender, WaveInEventArgs e)
         {
-            List<float> samples = new List<float>();
             for (int i = 0; i < e.BytesRecorded; i += 4)
             {
                 float sample = BitConverter.ToSingle(e.Buffer, i);
-                samples.Add(sample);
+                _sampleBuffer.Add(sample);
+
+                // If the buffer reaches the specified size, process the samples
+                if (_sampleBuffer.Count >= BufferSize)
+                {
+                    // Create a copy of the current samples
+                    List<float> samplesToProcess = new List<float>(_sampleBuffer);
+                    _sampleBuffer.Clear(); // Clear the buffer for new samples
+                    OnSamplesCaptured?.Invoke(samplesToProcess);
+                }
             }
-            OnSamplesCaptured?.Invoke(samples);
         }
 
         public void StartCapturing() => _loopbackCapture.StartRecording();
