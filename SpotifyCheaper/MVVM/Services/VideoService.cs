@@ -158,6 +158,13 @@ namespace SpotifyCheaper.MVVM.Services
             jObjectList["TotalVideo"] = videoList.Count;
             return fileRepository.InputJsonFile(file, jObjectList.ToString());
         }
+        public void DeleteSong(Video videoToDelete)
+        {
+            if (videoToDelete != null)
+            {
+                Videos.Remove(videoToDelete);
+            }
+        }
         public void LoadVideosFromJson()
         {
             string path = "videoList.json";

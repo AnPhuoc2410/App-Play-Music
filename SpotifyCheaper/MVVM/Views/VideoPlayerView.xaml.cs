@@ -72,8 +72,9 @@ namespace SpotifyCheaper.MVVM.Views
         private void BtnGoBack_Click(object sender, RoutedEventArgs e)
         {
             MainWindow main = new MainWindow();
+            this.Hide();
             main.Show();
-            Window.GetWindow(this)?.Close();
+            
         }
 
         private void BtnPrevious_Click(object sender, RoutedEventArgs e)
@@ -319,6 +320,11 @@ namespace SpotifyCheaper.MVVM.Views
         {
             base.OnClosed(e);
             Application.Current.Shutdown();
+        }
+
+        public void DeleteSong_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

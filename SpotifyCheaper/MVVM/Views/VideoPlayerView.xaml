@@ -154,7 +154,7 @@
                             <!-- Delete Button -->
                             <Button Content="Delete" Grid.Column="4" Width="75" Height="30" 
                         HorizontalAlignment="Center" VerticalAlignment="Center" 
-                        Background="Red" Foreground="White"/>
+                        Background="Red" Foreground="White" Click="DeleteSong_Click"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
