@@ -7,8 +7,8 @@ namespace SpotifyCheaper.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<string> _playlist;
-        public ObservableCollection<string> Playlist
+        private ObservableCollection<Playlist> _playlist;
+        public ObservableCollection<Playlist> Playlist
         {
             get => _playlist;
             set
@@ -21,7 +21,9 @@ namespace SpotifyCheaper.ViewModels
         public MainViewModel()
         {
             // Sample data; replace with your actual data source
-            Playlist = new ObservableCollection<string> { "Us-UK", "Nhạc Suy", "IF You miss" };
+            MainWindow mainWindow = new MainWindow();
+            var inPlaylist = mainWindow.currentPlaylist;
+            Playlist = inPlaylist;
         }
 
         // INotifyPropertyChanged implementation
