@@ -72,4 +72,30 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="Slider" x:Key="GreenSliderVolume">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Slider">
+                    <Grid>
+                        <Track Name="PART_Track" Focusable="False" 
+                           Height="7" >
+                            <Track.Thumb>
+                                <Thumb Width="8" Height="16" Background="#8EDCAA" />
+                            </Track.Thumb>
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Background="#8EDCAA" Height="4" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Background="Gray" Height="4" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
 </ResourceDictionary>

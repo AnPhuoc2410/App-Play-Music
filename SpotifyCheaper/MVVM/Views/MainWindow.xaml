@@ -33,9 +33,9 @@
                 <Button Content="Songs" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="Albums" Style="{StaticResource NavButtonStyle}" />
                 <Button Content="PLaylist" Style="{StaticResource NavButtonStyle}" Click="ArtistsButton_Click" />
-                
                 <ListBox x:Name="PlayListBox" ItemsSource="{Binding Playlist}" Background="#333" 
                 Foreground="White" Visibility="Collapsed" Margin="10,20,0,0" SelectionChanged="PlayListBox_SelectionChanged"/>
+                
                 <Button x:Name="ImportButton" Content="Add Songs" Style="{StaticResource NavButtonStyle}" Click="ImportButton_Click" />
             </StackPanel>
 
@@ -81,13 +81,13 @@
                         <Border Background="#2e2e2e" CornerRadius="5" Padding="10" Margin="5">
                             <Grid Width="935">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
                                     <!-- Track Number Column -->
                                     <ColumnDefinition Width="2*"/>
                                     <!-- Title Column -->
-                                    <ColumnDefinition Width="2*"/>
-                                    <!-- Artist Column -->
                                     <ColumnDefinition Width="*"/>
+                                    <!-- Artist Column -->
+                                    <ColumnDefinition Width="75"/>
                                     <!-- Duration Column -->
                                     <ColumnDefinition Width="100"/>
                                     <!-- Delete Button Column -->
@@ -109,15 +109,14 @@
                                 <TextBlock Text="{Binding Duration}" FontSize="14" Foreground="Gray" 
                            Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" />
 
-                                <!-- Delete Button -->
-                                <!-- Delete Button (replaced with 3-dot menu) -->
+                                <!--Optional Songs-->
                                 <Button Grid.Column="4" Style="{StaticResource ControlButtonStyle}" Click="ThreeDotButton_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="../Resources/Images/ellipsis.png" Width="24" Height="24"/>
                                     </StackPanel>
                                     <Button.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="Add to Playlist" Click="AddSongToPlaylist_Click"/>
+                                            <MenuItem Header="Add to Playlist"/>
                                             <MenuItem Header="Delete Song" Click="DeleteSong_Click"/>
                                         </ContextMenu>
                                     </Button.ContextMenu>
@@ -205,7 +204,7 @@
                         </StackPanel>
                     </Button>
                     <Slider x:Name="VolumeSlider" Width="100" Minimum="0" Maximum="1" Value="0.5" 
-            ValueChanged="VolumeSlider_ValueChanged" Margin="15,15,10,10"/>
+            ValueChanged="VolumeSlider_ValueChanged" Style="{StaticResource GreenSliderVolume}" Margin="15,15,10,10"/>
                 </StackPanel>
             </DockPanel>
         </Grid>

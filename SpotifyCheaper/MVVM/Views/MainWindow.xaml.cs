@@ -402,24 +402,24 @@ namespace SpotifyCheaper
             videoPlayerView.ShowDialog();
         }
 
-        private void AddSongToPlaylist_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Ôk");
-            //LoadSongs();
-        }
-
         private void ThreeDotButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Ôk");
-            //LoadSongs();
+            Button? button = sender as Button;
+            if (button?.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.IsOpen = true;
+            }
         }
 
         private void DeleteSong_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is Song songToDelete)
+            if (sender is MenuItem menuItem && menuItem.DataContext is Song songToDelete)
             {
+                // Check if the song to delete is the current song
                 if (_currentSongIndex >= 0 && _songSerivce.Songs.IndexOf(songToDelete) == _currentSongIndex)
                 {
+                    // Stop playback and reset UI if the deleted song is currently playing
                     _mediaPlayer.Stop();
                     _timer.Stop();
                     _isPlaying = false;
@@ -430,17 +430,26 @@ namespace SpotifyCheaper
                     DurationSlider.Value = 0.0;
                     CurrentPositionTextBlock.Text = "00:00";
                 }
+
+                // Delete the song from the service
                 _songSerivce.DeleteSong(songToDelete);
+
+                // Update Play button to show "Play" icon
                 PlayButton.Content = new Image
                 {
                     Source = new BitmapImage(new Uri(@"..\Resources\Images\play.png", UriKind.Relative)),
                     Width = 24,
                     Height = 24
                 };
+
+                // Update total song list in JSON file
                 _musicService.DeleteAndChangeTotalSong("songPath.json", _songSerivce.Songs);
+
+                // Show confirmation message
                 MessageBox.Show("Song deleted.", "Delete", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
 
 
         private void SearchingButton_Click(object sender, RoutedEventArgs e)
